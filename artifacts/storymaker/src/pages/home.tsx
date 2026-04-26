@@ -240,7 +240,7 @@ export default function Home() {
       </header>
 
       {/* HERO — fullbanner */}
-      <section id="top" className="relative h-[92vh] min-h-[620px] max-h-[920px] -mt-[88px] overflow-hidden">
+      <section id="top" className="relative h-[92vh] min-h-[620px] max-h-[920px] -mt-[88px] md:-mt-[104px] overflow-hidden">
         <img
           src={heroSilhouettes}
           alt="Silhueta de noivos entre velas"
