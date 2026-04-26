@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 
 import logoImage from "@assets/Logo_StoryMaker_Casamento_Sem_fundo_1777242203099.png";
 import ownerImage from "@assets/WhatsApp_Image_2026-04-26_at_18.45.59_1777240064953.jpeg";
-import julioThaliaPhoto from "@assets/WhatsApp_Image_2026-04-26_at_19.19.34_1777242327644.jpeg";
+import julioThaliaPhoto from "@assets/ChatGPT_Image_26_04_2026,_19_39_46_1777243190988.png";
+import julioThaliaCandid from "@assets/WhatsApp_Image_2026-04-26_at_19.19.34_1777242327644.jpeg";
 import filmJulioThalia1 from "@assets/film_julio_thalia_1.mp4";
 import filmJulioThalia2 from "@assets/film_julio_thalia_2.mp4";
 import filmJulioThalia3 from "@assets/film_julio_thalia_3.mp4";
@@ -246,11 +247,12 @@ export default function Home() {
       {/* HERO — fullbanner */}
       <section id="top" className="relative h-[92vh] min-h-[620px] max-h-[920px] -mt-[88px] overflow-hidden">
         <img
-          src={heroSilhouettes}
-          alt="Silhueta de noivos ao pôr do sol"
+          src={julioThaliaPhoto}
+          alt="Julio e Thalia no altar floral"
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: "center 28%" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/65" />
 
         <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
