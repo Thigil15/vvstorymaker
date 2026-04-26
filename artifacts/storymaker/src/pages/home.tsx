@@ -1,22 +1,23 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Heart, Film, Video, Star, Phone, ArrowRight, Instagram, Mail } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
-// Assets
-import logoImage from "@assets/WhatsApp_Image_2026-04-26_at_18.45.58_1777240064951.jpeg";
-import ownerPhoto from "@assets/WhatsApp_Image_2026-04-26_at_18.45.59_1777240064953.jpeg";
-import heroImg from "@/assets/images/hero.png";
-import details1Img from "@/assets/images/details-1.png";
-import details2Img from "@/assets/images/details-2.png";
+import logoImage from "@assets/storymaker_logo_transparent.png";
+import ownerImage from "@assets/WhatsApp_Image_2026-04-26_at_18.45.59_1777240064953.jpeg";
+
+import heroSilhouettes from "@/assets/images/hero-silhouettes.png";
+import ringsImage from "@/assets/images/rings.png";
+import champagneImage from "@/assets/images/champagne.png";
+import vowsImage from "@/assets/images/vows.png";
+import laceImage from "@/assets/images/lace.png";
 
 const WHATSAPP_LINK = "https://wa.me/5511999999999";
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: EASE } }
 };
 
 const staggerContainer = {
@@ -24,314 +25,353 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
+      staggerChildren: 0.2,
+      delayChildren: 0.3
     }
   }
 };
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  
   return (
-    <div className="min-h-screen bg-background selection:bg-primary/20">
+    <div className="min-h-screen bg-background overflow-hidden selection:bg-primary selection:text-primary-foreground">
+      
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <img src={logoImage} alt="Storymaker de Casamento" className="h-12 w-auto object-contain mix-blend-multiply" />
-          <Button asChild variant="outline" className="hidden md:inline-flex border-primary/20 hover:bg-primary/10">
-            <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-              Falar com a equipe
-            </a>
-          </Button>
+      <nav className="fixed top-0 left-0 right-0 z-50 mix-blend-difference flex items-center justify-between px-6 md:px-12 py-6">
+        <div className="w-24 md:w-28 mix-blend-normal">
+          <img src={logoImage} alt="Storymaker de Casamento" className="w-full h-auto drop-shadow-md" />
         </div>
+        <div className="hidden md:flex items-center gap-8 text-sm tracking-widest uppercase text-[#fdfaf5]">
+          <a href="#sobre" className="hover:opacity-70 transition-opacity">Sobre</a>
+          <a href="#colecoes" className="hover:opacity-70 transition-opacity">Coleções</a>
+          <a href="#complementos" className="hover:opacity-70 transition-opacity">Complementos</a>
+        </div>
+        <Button 
+          variant="outline" 
+          className="hidden md:flex rounded-none border-[#fdfaf5] text-[#fdfaf5] hover:bg-[#fdfaf5] hover:text-primary transition-colors bg-transparent backdrop-blur-sm"
+          onClick={() => window.open(WHATSAPP_LINK, "_blank")}
+        >
+          Conversar no WhatsApp
+        </Button>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
+      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
+        <motion.div 
+          className="absolute inset-0 w-full h-full"
+          style={{ y: heroY }}
+        >
           <img 
-            src={heroImg} 
-            alt="Casamento Cinematográfico" 
-            className="w-full h-full object-cover scale-105 animate-in fade-in zoom-in duration-1000"
+            src={heroSilhouettes} 
+            alt="Silhueta de noivos" 
+            className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background" />
-        </div>
-        
-        <div className="relative z-10 container mx-auto px-6 text-center text-white mt-20">
+          <div className="absolute inset-0 bg-black/20" />
+        </motion.div>
+
+        <div className="relative z-10 text-center px-6 mt-20">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="max-w-3xl mx-auto space-y-6"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
           >
-            <motion.h1 
-              variants={fadeIn}
-              className="text-5xl md:text-7xl font-serif text-white drop-shadow-lg leading-tight"
+            <p className="text-white/80 uppercase tracking-[0.3em] text-xs md:text-sm mb-6">Filmes de Casamento</p>
+            <h1 className="text-white text-6xl md:text-8xl lg:text-[9rem] leading-[0.8] script-font mb-8">
+              O capítulo mais <br/>
+              <span className="text-white/90">bonito</span> da sua história
+            </h1>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="flex flex-col items-center gap-4"
+          >
+            <Button 
+              className="rounded-none bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 h-auto transition-all duration-500"
+              onClick={() => window.open(WHATSAPP_LINK, "_blank")}
             >
-              A eternidade contada em <span className="italic text-primary-foreground/90">fração de segundos</span>
-            </motion.h1>
-            <motion.p 
-              variants={fadeIn}
-              className="text-lg md:text-xl text-white/90 drop-shadow-md font-light tracking-wide"
+              Reservar minha data
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* The Atelier Concept */}
+      <section className="py-32 px-6 md:px-12 bg-background relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeUp}
+              className="space-y-8 max-w-lg"
             >
-              Capturamos a essência, o calor e a intimidade do dia mais emocionante da sua vida através de storytelling cinematográfico.
-            </motion.p>
-            <motion.div variants={fadeIn} className="pt-8">
-              <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 text-lg px-8 py-6 rounded-none tracking-wide">
-                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-                  Solicite um orçamento <ArrowRight className="ml-2 w-5 h-5" />
-                </a>
+              <h2 className="text-5xl md:text-7xl script-font text-primary leading-tight">
+                Um atelier <br/>de memória
+              </h2>
+              <p className="text-lg md:text-xl text-primary/80 leading-relaxed font-serif">
+                Acreditamos no silêncio entre as palavras, na respiração antes do beijo, no toque imperceptível das mãos. Nossos filmes não são registros mecânicos — são heranças de família.
+              </p>
+              <p className="text-lg md:text-xl text-primary/80 leading-relaxed font-serif">
+                Para casais que tratam o casamento como uma obra de arte: cultivado, íntimo e intemporal.
+              </p>
+            </motion.div>
+            
+            <div className="relative">
+              <motion.img 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                src={ringsImage} 
+                alt="Detalhe íntimo" 
+                className="w-full aspect-[3/4] object-cover shadow-2xl"
+              />
+              <motion.img 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
+                src={laceImage} 
+                alt="Textura de renda" 
+                className="absolute -bottom-16 -left-12 md:-left-24 w-1/2 aspect-[3/4] object-cover border-8 border-background shadow-xl hidden md:block"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet the Storymaker */}
+      <section id="sobre" className="py-32 bg-[#f9f6f0] px-6 md:px-12">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16 md:gap-24">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="flex-1 space-y-8"
+          >
+            <h2 className="text-4xl md:text-6xl script-font text-primary">Atrás da lente</h2>
+            <div className="space-y-6 text-lg md:text-xl text-primary/80 font-serif leading-relaxed italic">
+              <p>
+                "Fotografar e filmar casamentos é, para mim, registrar o capítulo mais bonito de uma história que continua."
+              </p>
+              <p>
+                "Eu não quero apenas entregar um vídeo bonito. Quero que daqui a vinte anos, quando vocês sentarem no sofá com uma taça de vinho para rever esse dia, vocês consigam sentir exatamente o mesmo perfume no ar, o mesmo frio na barriga, a mesma certeza."
+              </p>
+            </div>
+            <div className="pt-8">
+              <span className="text-4xl script-font text-primary/90">Sua Storymaker</span>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5 }}
+            className="flex-1 w-full"
+          >
+            <div className="aspect-[4/5] relative bg-secondary overflow-hidden group">
+               <img src={ownerImage} alt="Fotógrafa" className="w-full h-full object-cover object-top transition-transform duration-[20s] group-hover:scale-105" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Packages / Coleções */}
+      <section id="colecoes" className="py-32 px-6 md:px-12 bg-background">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="text-center mb-24"
+          >
+            <span className="uppercase tracking-[0.2em] text-xs text-primary/60 mb-4 block">Investimento</span>
+            <h2 className="text-6xl md:text-8xl script-font text-primary">Coleções</h2>
+            <p className="mt-6 text-lg text-primary/70 max-w-2xl mx-auto">
+              Cada celebração é única. Nossas coleções foram desenhadas para honrar a magnitude do seu dia com elegância e dedicação absoluta.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+          >
+            {/* Package 1 */}
+            <motion.div variants={fadeUp} className="border border-primary/10 p-8 flex flex-col hover:border-primary/30 transition-colors bg-[#fdfaf5]">
+              <h3 className="text-3xl script-font mb-2">Essencial</h3>
+              <p className="text-2xl font-serif mb-6">R$ 1.600</p>
+              <div className="h-px w-12 bg-primary/20 mb-6"></div>
+              <p className="text-primary/70 text-sm leading-relaxed mb-8 flex-1">
+                A captura essencial do dia: cobertura cinematográfica do casamento e entrega de um filme curto que guarda a emoção dos momentos centrais.
+              </p>
+            </motion.div>
+
+            {/* Package 2 */}
+            <motion.div variants={fadeUp} className="border border-primary/10 p-8 flex flex-col hover:border-primary/30 transition-colors bg-[#fdfaf5]">
+              <h3 className="text-3xl script-font mb-2">Intermediário I</h3>
+              <p className="text-2xl font-serif mb-6">R$ 2.000</p>
+              <div className="h-px w-12 bg-primary/20 mb-6"></div>
+              <p className="text-primary/70 text-sm leading-relaxed mb-8 flex-1">
+                Cobertura ampliada com mais tempo de presença, segundo ponto de vista e edição mais detalhada — para quem quer revisitar mais cenas do dia.
+              </p>
+            </motion.div>
+
+            {/* Package 3 */}
+            <motion.div variants={fadeUp} className="border border-primary/10 p-8 flex flex-col hover:border-primary/30 transition-colors bg-[#fdfaf5]">
+              <h3 className="text-3xl script-font mb-2">Intermediário II</h3>
+              <p className="text-2xl font-serif mb-6">R$ 2.390</p>
+              <div className="h-px w-12 bg-primary/20 mb-6"></div>
+              <p className="text-primary/70 text-sm leading-relaxed mb-8 flex-1">
+                Inclui making-of dos noivos, cobertura completa da cerimônia e festa, e um filme longa com trilha cuidadosamente escolhida.
+              </p>
+            </motion.div>
+
+            {/* Package 4 - Premium */}
+            <motion.div variants={fadeUp} className="border-2 border-accent p-8 flex flex-col bg-primary text-primary-foreground relative shadow-2xl scale-105 z-10 transform origin-bottom">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-primary px-4 py-1 text-xs uppercase tracking-wider font-sans font-medium whitespace-nowrap">
+                Mais Escolhido
+              </div>
+              <h3 className="text-4xl script-font mb-2 text-accent">Premium</h3>
+              <p className="text-2xl font-serif mb-6 text-primary-foreground/90">R$ 2.790</p>
+              <div className="h-px w-12 bg-accent/40 mb-6"></div>
+              <p className="text-primary-foreground/80 text-sm leading-relaxed mb-8 flex-1">
+                Experiência completa: making-of dele e dela, ensaio pré-wedding, filme cinematográfico longa, teaser para redes e entrega em embalagem assinada.
+              </p>
+              <Button 
+                className="w-full bg-accent hover:bg-accent/90 text-primary rounded-none h-12"
+                onClick={() => window.open(WHATSAPP_LINK, "_blank")}
+              >
+                Solicitar Reserva
               </Button>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-16 max-w-6xl mx-auto">
+      {/* Decorative Image Break */}
+      <section className="h-[70vh] relative overflow-hidden">
+         <motion.div 
+            className="absolute inset-0 w-full h-full"
+            style={{ y: useTransform(scrollYProgress, [0.4, 0.8], ["-10%", "10%"]) }}
+          >
+            <img src={champagneImage} alt="Brinde" className="w-full h-full object-cover" />
+         </motion.div>
+      </section>
+
+      {/* Add-ons / Complementos */}
+      <section id="complementos" className="py-32 px-6 md:px-12 bg-[#f9f6f0]">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-16 md:gap-24">
             <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8 }}
-              className="w-full md:w-1/2 relative"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              className="md:w-1/3"
             >
-              <div className="aspect-[3/4] overflow-hidden relative">
-                <img 
-                  src={ownerPhoto} 
-                  alt="Storymaker" 
-                  className="w-full h-full object-cover rounded-sm shadow-xl"
-                />
-                <div className="absolute inset-0 border border-primary/20 rounded-sm scale-[0.95]" />
-              </div>
+              <span className="uppercase tracking-[0.2em] text-xs text-primary/60 mb-4 block">Personalização</span>
+              <h2 className="text-5xl md:text-7xl script-font text-primary mb-6">Complementos</h2>
+              <p className="text-lg text-primary/70 mb-8">
+                Pequenos detalhes que transformam a experiência e guardam memórias adicionais do seu dia.
+              </p>
+              <img src={vowsImage} alt="Votos" className="w-full aspect-[4/3] object-cover shadow-lg" />
             </motion.div>
-            
+
             <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8 }}
-              className="w-full md:w-1/2 space-y-6"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="md:w-2/3 grid sm:grid-cols-2 gap-x-12 gap-y-16"
             >
-              <h2 className="text-sm tracking-widest uppercase text-primary/80 font-sans font-semibold">Nossa Essência</h2>
-              <h3 className="text-4xl md:text-5xl text-foreground leading-tight">
-                Muito além de <span className="italic text-primary">apertar o rec</span>
-              </h3>
-              <div className="space-y-4 text-muted-foreground leading-relaxed text-lg font-light">
-                <p>
-                  Acreditamos que cada casamento tem um ritmo, uma respiração própria. Não somos apenas cinegrafistas; somos espectadores invisíveis dos momentos que você nem sabia que haviam acontecido.
+              <motion.div variants={fadeUp} className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-px bg-accent"></div>
+                  <h4 className="text-2xl script-font text-primary">Votos gravados</h4>
+                </div>
+                <p className="text-primary/70 leading-relaxed">
+                  Registro íntimo dos votos lidos pelos noivos antes da cerimônia, editado em peça à parte.
                 </p>
-                <p>
-                  O olhar afetuoso da sua mãe, o nervosismo silencioso do noivo, a taça de champanhe brindando a uma nova vida. Transformamos esses instantes em um filme que você vai assistir daqui a vinte anos e sentir o mesmo frio na barriga.
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-px bg-accent"></div>
+                  <h4 className="text-2xl script-font text-primary">Stories em tempo real</h4>
+                </div>
+                <p className="text-primary/70 leading-relaxed">
+                  Bastidores publicados ao vivo durante o dia para compartilhar a emoção com quem está distante.
                 </p>
-              </div>
-              <div className="pt-6">
-                <img src={logoImage} alt="Assinatura" className="h-16 opacity-80 mix-blend-multiply" />
-              </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-px bg-accent"></div>
+                  <h4 className="text-2xl script-font text-primary">Trends & reels</h4>
+                </div>
+                <p className="text-primary/70 leading-relaxed">
+                  Peças curtas verticais pensadas para Instagram e TikTok, no ritmo do que viraliza.
+                </p>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-px bg-accent"></div>
+                  <h4 className="text-2xl script-font text-primary">Vídeo carta</h4>
+                </div>
+                <p className="text-primary/70 leading-relaxed">
+                  Uma carta em vídeo dos noivos um para o outro, entregue de surpresa no dia.
+                </p>
+              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Cinematic Break */}
-      <section className="py-0 relative h-[60vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={details2Img} alt="Detalhes" className="w-full h-full object-cover scale-105" />
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
-        <div className="relative z-10 text-center px-6">
-          <Heart className="w-12 h-12 text-white/80 mx-auto mb-6 opacity-80" />
-          <h2 className="text-3xl md:text-5xl text-white italic drop-shadow-md">
-            "O amor mora nos detalhes."
+      {/* CTA Footer */}
+      <section className="py-32 px-6 md:px-12 bg-primary text-primary-foreground text-center flex flex-col items-center justify-center">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          className="max-w-3xl space-y-12"
+        >
+          <h2 className="text-6xl md:text-8xl script-font text-accent leading-tight">
+            Prontos para eternizar <br/>este capítulo?
           </h2>
-        </div>
-      </section>
-
-      {/* Packages Section */}
-      <section className="py-32 bg-accent/10 relative">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-sm tracking-widest uppercase text-primary/80 font-sans font-semibold mb-4">Investimento</h2>
-            <h3 className="text-4xl md:text-5xl text-foreground">A sua história em capítulos</h3>
-            <p className="mt-6 text-muted-foreground text-lg">Selecione a experiência que melhor traduz o seu sonho.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
-            {/* Pacote 1 */}
-            <Card className="border-border/40 bg-card/50 backdrop-blur-sm shadow-none hover:shadow-md transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-xl font-normal">Pacote Essencial</CardTitle>
-                <CardDescription className="text-2xl text-foreground mt-2">R$ 1.600</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Cerimônia</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Festa</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Edição dinâmica</li>
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <Button asChild variant="outline" className="w-full">
-                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">Escolher</a>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Pacote 2 */}
-            <Card className="border-border/40 bg-card/50 backdrop-blur-sm shadow-none hover:shadow-md transition-shadow relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-primary/30" />
-              <CardHeader>
-                <CardTitle className="text-xl font-normal">Intermediário I</CardTitle>
-                <CardDescription className="text-2xl text-foreground mt-2">R$ 2.000</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-primary/5 p-3 rounded-sm mb-4 text-xs italic text-primary border border-primary/10">
-                  "O making off pesa muito emocionalmente — é o upgrade lógico"
-                </div>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Making off</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Cerimônia</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Festa</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Edição emocional</li>
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <Button asChild variant="outline" className="w-full">
-                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">Escolher</a>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Pacote 3 */}
-            <Card className="border-border/40 bg-card/50 backdrop-blur-sm shadow-none hover:shadow-md transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-xl font-normal">Intermediário II</CardTitle>
-                <CardDescription className="text-2xl text-foreground mt-2">R$ 2.390</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Pré-wedding</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Cerimônia</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Festa</li>
-                  <li className="flex items-start"><Film className="w-4 h-4 mr-2 text-primary/60 shrink-0 mt-0.5" /> Edição com storytelling</li>
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <Button asChild variant="outline" className="w-full">
-                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">Escolher</a>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Pacote Premium - Highlighted */}
-            <Card className="border-primary bg-primary/5 shadow-lg transform md:-translate-y-4 relative">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 text-xs uppercase tracking-wider rounded-sm shadow-sm flex items-center">
-                <Star className="w-3 h-3 mr-1" /> A Escolha Perfeita
-              </div>
-              <CardHeader className="pt-8">
-                <CardTitle className="text-2xl font-normal text-primary">Premium</CardTitle>
-                <CardDescription className="text-3xl text-foreground mt-2 font-medium">R$ 2.790</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-sm text-foreground/80">
-                  <li className="flex items-start font-medium"><Video className="w-4 h-4 mr-2 text-primary shrink-0 mt-0.5" /> Pré-wedding</li>
-                  <li className="flex items-start font-medium"><Video className="w-4 h-4 mr-2 text-primary shrink-0 mt-0.5" /> Making off</li>
-                  <li className="flex items-start font-medium"><Video className="w-4 h-4 mr-2 text-primary shrink-0 mt-0.5" /> Cerimônia</li>
-                  <li className="flex items-start font-medium"><Video className="w-4 h-4 mr-2 text-primary shrink-0 mt-0.5" /> Festa</li>
-                  <li className="flex items-start font-medium"><Video className="w-4 h-4 mr-2 text-primary shrink-0 mt-0.5" /> Edição cinematográfica</li>
-                  <li className="flex items-start font-medium"><Video className="w-4 h-4 mr-2 text-primary shrink-0 mt-0.5" /> Conteúdo para redes sociais</li>
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-6 text-lg">
-                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">Reservar Data</a>
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Add-ons Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6 max-w-5xl">
-          <div className="flex flex-col md:flex-row items-center gap-16">
-            <div className="w-full md:w-1/2">
-              <img src={details1Img} alt="Detalhes Finos" className="w-full rounded-sm shadow-xl" />
-            </div>
-            <div className="w-full md:w-1/2">
-              <h2 className="text-3xl md:text-4xl text-foreground mb-8">Adicionais Especiais</h2>
-              <div className="space-y-6">
-                <div className="flex justify-between items-end border-b border-border/50 pb-4">
-                  <div>
-                    <h4 className="text-lg font-medium text-foreground">Votos gravados + edição</h4>
-                    <p className="text-sm text-muted-foreground">O áudio puro das suas promessas</p>
-                  </div>
-                  <span className="text-primary font-medium">a partir de R$ 300</span>
-                </div>
-                <div className="flex justify-between items-end border-b border-border/50 pb-4">
-                  <div>
-                    <h4 className="text-lg font-medium text-foreground">Stories em tempo real</h4>
-                    <p className="text-sm text-muted-foreground">Para compartilhar no dia</p>
-                  </div>
-                  <span className="text-primary font-medium">a partir de R$ 250</span>
-                </div>
-                <div className="flex justify-between items-end border-b border-border/50 pb-4">
-                  <div>
-                    <h4 className="text-lg font-medium text-foreground">Trends/Reels</h4>
-                    <p className="text-sm text-muted-foreground">Vídeos curtos engajantes</p>
-                  </div>
-                  <span className="text-primary font-medium">a partir de R$ 200</span>
-                </div>
-                <div className="flex justify-between items-end border-b border-border/50 pb-4">
-                  <div>
-                    <h4 className="text-lg font-medium text-foreground">Vídeo com cartas</h4>
-                    <p className="text-sm text-muted-foreground">Um registro emocionante da troca</p>
-                  </div>
-                  <span className="text-primary font-medium">a partir de R$ 300</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-32 bg-foreground text-background text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-primary/5" />
-        <div className="container mx-auto px-6 relative z-10 max-w-3xl">
-          <Heart className="w-12 h-12 text-primary mx-auto mb-8 opacity-80" />
-          <h2 className="text-4xl md:text-6xl text-background mb-8 leading-tight">
-            Prontos para dar <span className="text-primary italic">play</span> na sua história?
-          </h2>
-          <p className="text-background/70 text-lg mb-12 font-light">
-            Nossa agenda de casamentos é limitada para garantir dedicação total a cada casal. Entre em contato para verificar a disponibilidade da sua data.
+          <p className="text-xl md:text-2xl text-primary-foreground/80 font-serif max-w-xl mx-auto">
+            Nossa agenda é limitada para garantir a dedicação que cada história merece.
           </p>
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white border-none py-8 px-10 text-xl rounded-none w-full sm:w-auto">
-            <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-              <Phone className="mr-3 w-6 h-6" /> Conversar pelo WhatsApp
-            </a>
+          
+          <Button 
+            size="lg"
+            className="bg-accent hover:bg-accent/90 text-primary text-lg h-16 px-12 rounded-none transform transition-transform hover:scale-105"
+            onClick={() => window.open(WHATSAPP_LINK, "_blank")}
+          >
+            Conversar no WhatsApp <ArrowRight className="ml-3 h-5 w-5" />
           </Button>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Footer */}
-      <footer className="bg-background pt-20 pb-10 border-t border-border/50">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
-            <img src={logoImage} alt="Storymaker de Casamento" className="h-16 mix-blend-multiply opacity-80" />
-            <div className="flex space-x-6 text-muted-foreground">
-              <a href="#" className="hover:text-primary transition-colors"><Instagram className="w-6 h-6" /></a>
-              <a href="#" className="hover:text-primary transition-colors"><Mail className="w-6 h-6" /></a>
-            </div>
-          </div>
-          <Separator className="bg-border/50 mb-8" />
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground/60 font-light">
-            <p>© {new Date().getFullYear()} Storymaker de Casamento. Todos os direitos reservados.</p>
-            <p className="mt-2 md:mt-0">Desenvolvido com sofisticação no Brasil.</p>
-          </div>
+        <div className="mt-32 w-28 opacity-60 hover:opacity-100 transition-opacity">
+          <img src={logoImage} alt="Storymaker logo" className="w-full" />
         </div>
-      </footer>
+        <p className="mt-12 text-sm text-primary-foreground/40 tracking-widest uppercase">
+          © {new Date().getFullYear()} Storymaker. Todos os direitos reservados.
+        </p>
+      </section>
+      
     </div>
   );
 }

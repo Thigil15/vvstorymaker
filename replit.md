@@ -25,3 +25,9 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - `pnpm --filter @workspace/api-server run dev` — run API server locally
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+
+## Artifacts
+
+- **`artifacts/storymaker`** (web) — Single-page Brazilian Portuguese landing page for "Storymaker de Casamento", a high-end wedding videography brand. Editorial/cinematic design driven by Pinyon Script (display) and Cormorant Garamond (body). Hero, atelier, sobre, coleções (4 packages: Essencial R$1.600, Intermediário I R$2.000, Intermediário II R$2.390, Premium R$2.790 — featured), complementos (4 add-ons), and closing WhatsApp CTA. Owner photo and transparent logo PNG live in `attached_assets/`. WhatsApp link is currently `https://wa.me/5511999999999` (placeholder — owner to replace). No backend.
+- **`artifacts/api-server`** — Express API scaffold (unused by storymaker).
+- **`artifacts/mockup-sandbox`** — Component preview sandbox.

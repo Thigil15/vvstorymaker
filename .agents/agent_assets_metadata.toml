@@ -18,3 +18,33 @@ id = "trkd0QAtqcc27HoJJqfoS"
 uri = "file://artifacts/storymaker/src/assets/images/details-2.png"
 type = "image"
 title = "Couple holding hands"
+
+[[generated]]
+id = "svPQCcRLeWmnJPmM_Cgri"
+uri = "file://artifacts/storymaker/src/assets/images/hero-silhouettes.png"
+type = "image"
+title = "Couple silhouettes in candlelight"
+
+[[generated]]
+id = "fZ7Wml3LWsZnEifBggkTM"
+uri = "file://artifacts/storymaker/src/assets/images/rings.png"
+type = "image"
+title = "Hands exchanging rings"
+
+[[generated]]
+id = "V6GJREsuuPHF21PNoX5Bl"
+uri = "file://artifacts/storymaker/src/assets/images/champagne.png"
+type = "image"
+title = "Champagne flutes"
+
+[[generated]]
+id = "dUhhzSI8OEoekVAtqxbQU"
+uri = "file://artifacts/storymaker/src/assets/images/vows.png"
+type = "image"
+title = "Written vow on linen"
+
+[[generated]]
+id = "YQOLmLw6sas6MN94R_SSD"
+uri = "file://artifacts/storymaker/src/assets/images/lace.png"
+type = "image"
+title = "Wedding dress lace detail"
