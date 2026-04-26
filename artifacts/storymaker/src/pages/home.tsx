@@ -247,12 +247,11 @@ export default function Home() {
       {/* HERO — fullbanner */}
       <section id="top" className="relative h-[92vh] min-h-[620px] max-h-[920px] -mt-[88px] overflow-hidden">
         <img
-          src={julioThaliaPhoto}
-          alt="Julio e Thalia no altar floral"
+          src={heroSilhouettes}
+          alt="Silhueta de noivos entre velas"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "center 28%" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/65" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
 
         <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
