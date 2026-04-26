@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import logoImage from "@assets/Logo_StoryMaker_Casamento_Sem_fundo_1777242203099.png";
 import ownerImage from "@assets/WhatsApp_Image_2026-04-26_at_18.45.59_1777240064953.jpeg";
 import julioThaliaPhoto from "@assets/ChatGPT_Image_26_04_2026,_19_39_46_1777243190988.png";
-import julioThaliaCandid from "@assets/WhatsApp_Image_2026-04-26_at_19.19.34_1777242327644.jpeg";
 import filmJulioThalia1 from "@assets/film_julio_thalia_1.mp4";
 import filmJulioThalia2 from "@assets/film_julio_thalia_2.mp4";
 import filmJulioThalia3 from "@assets/film_julio_thalia_3.mp4";
@@ -108,20 +107,11 @@ const FEATURED_FILMS: FeaturedFilm[] = [
   { couple: "Julio & Thalia", scene: "Primeira dança", video: filmJulioThalia4, poster: julioThaliaPhoto },
 ];
 
-const TESTIMONIAL_PHOTOS = [
-  { src: julioThaliaPhoto, label: "Julio & Thalia" },
-  { src: heroSilhouettes, label: "Júlia & Rafael" },
-  { src: champagneImage, label: "Marina & Lucas" },
-  { src: laceImage, label: "Beatriz & Pedro" },
-  { src: vowsImage, label: "Carolina & Tiago" },
-  { src: ringsImage, label: "Helena & Felipe" },
-];
-
 const TRUST_ICONS = [
   { title: "atendemos todo o Brasil", desc: "Disponíveis para destination weddings em qualquer cidade." },
-  { title: "qualidade 4K cinema", desc: "Câmeras profissionais, lentes cinematográficas e áudio tratado." },
+  { title: "olhar cinematográfico", desc: "Câmeras e lentes profissionais, áudio cuidadosamente tratado." },
   { title: "edição autoral", desc: "Cada filme é montado à mão, com narrativa pensada para o casal." },
-  { title: "equipe experiente", desc: "Mais de 200 casamentos filmados desde 2019." },
+  { title: "atendimento exclusivo", desc: "Poucos casais por ano para entregarmos cada filme com a atenção que ele merece." },
   { title: "entrega em até 90 dias", desc: "Trailer em 7 dias, filme completo em até 3 meses." },
   { title: "resposta em 1 hora", desc: "Atendimento direto pelo WhatsApp, sem intermediários." },
 ];
@@ -486,43 +476,6 @@ export default function Home() {
                   </p>
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS — make it Unforgettable grid */}
-      <section className="py-20 md:py-28 bg-[#f4eee2]/40">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="text-center mb-14">
-            <p className="smallcaps text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-3">
-              casais
-            </p>
-            <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-light leading-tight">
-              <span className="italic">make it</span> Unforgettable
-            </h2>
-            <p className="mt-5 max-w-[640px] mx-auto text-[16px] font-light text-[#3b322a] leading-[1.8]">
-              Histórias reais de amor que tivemos a honra de filmar — cada uma
-              com seu próprio ritmo, sua própria luz, seu próprio final feliz.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-            {TESTIMONIAL_PHOTOS.map((p) => (
-              <div
-                key={p.label}
-                className="group relative aspect-square overflow-hidden bg-[#1a1410]/5"
-              >
-                <img
-                  src={p.src}
-                  alt={p.label}
-                  className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 text-[#fdfaf5] opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                  <p className="text-[18px] font-light italic">{p.label}</p>
-                </div>
-              </div>
             ))}
           </div>
         </div>
