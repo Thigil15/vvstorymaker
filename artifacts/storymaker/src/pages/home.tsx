@@ -184,11 +184,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#fdfaf5] text-[#1a1410] selection:bg-[#1a1410] selection:text-[#fdfaf5]">
 
-      {/* TOPBAR — announcement */}
-      <div className="bg-[#0c0a08] text-[#fdfaf5] text-[12px] tracking-[0.3em] uppercase text-center py-2.5 px-4">
-        Atendemos casamentos em todo o Brasil · Resposta pelo WhatsApp em até 1 hora
-      </div>
-
       {/* HEADER */}
       <header
         className={`sticky top-0 z-50 transition-all duration-500 ${
