@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Storymaker de Casamento"
+version = "1.0.0"
+id = "artifacts/storymaker"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25387
+
+[services.development]
+run = "pnpm --filter @workspace/storymaker run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/storymaker", "run", "build" ]
+publicDir = "artifacts/storymaker/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25387"
+BASE_PATH = "/"

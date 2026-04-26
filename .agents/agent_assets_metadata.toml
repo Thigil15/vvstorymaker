@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "gRMkqrYEbP4lEP4t96pod"
+uri = "file://artifacts/storymaker/src/assets/images/hero.png"
+type = "image"
+title = "Cinematic wedding hero background"
+
+[[generated]]
+id = "A5kpt11XeOwuyXrP55IBr"
+uri = "file://artifacts/storymaker/src/assets/images/details-1.png"
+type = "image"
+title = "Candlelight and champagne details"
+
+[[generated]]
+id = "trkd0QAtqcc27HoJJqfoS"
+uri = "file://artifacts/storymaker/src/assets/images/details-2.png"
+type = "image"
+title = "Couple holding hands"
