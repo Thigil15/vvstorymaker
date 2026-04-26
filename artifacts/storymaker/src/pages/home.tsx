@@ -13,7 +13,7 @@ import details1 from "@/assets/images/details-1.png";
 import details2 from "@/assets/images/details-2.png";
 import heroAlt from "@/assets/images/hero.png";
 
-const WHATSAPP_LINK = "https://wa.me/5511999999999";
+const WHATSAPP_LINK = "https://wa.me/5512982355909";
 const WHATSAPP_TEXT =
   "Olá! Vim pelo site e gostaria de conversar sobre o filme do meu casamento.";
 const WHATSAPP_HREF = `${WHATSAPP_LINK}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
