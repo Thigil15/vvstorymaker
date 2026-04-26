@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Pinyon+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Spectral+SC:wght@300;400;500;600&family=Pinyon+Script&display=swap');
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -90,8 +90,9 @@
   --destructive: 0 70% 40%;
   --destructive-foreground: 0 0% 100%;
 
-  --app-font-sans: "Cormorant Garamond", serif;
-  --app-font-serif: "Cormorant Garamond", serif;
+  --app-font-sans: "Spectral", "Cormorant Garamond", serif;
+  --app-font-serif: "Spectral", "Cormorant Garamond", serif;
+  --app-font-smallcaps: "Spectral SC", "Spectral", serif;
   --app-font-script: "Pinyon Script", cursive;
   --app-font-mono: Menlo, monospace;
   --radius: 0; /* Sharp, elegant edges */
@@ -115,12 +116,12 @@
 
   body {
     @apply font-serif antialiased bg-background text-foreground selection:bg-foreground selection:text-background;
-    /* Soft noise texture overlay */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-script font-normal tracking-normal;
+    font-family: var(--app-font-serif);
+    font-weight: 300;
+    letter-spacing: 0.01em;
   }
 
   .text-balance {
@@ -131,3 +132,12 @@
 .script-font {
   font-family: var(--app-font-script);
 }
+
+.smallcaps {
+  font-family: var(--app-font-smallcaps);
+  font-feature-settings: "smcp" on;
+}
+
+/* Hide horizontal scrollbar on featured carousel */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
