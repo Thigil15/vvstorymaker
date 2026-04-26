@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-import logoImage from "@assets/storymaker_logo_transparent.png";
+import logoImage from "@assets/Logo_StoryMaker_Casamento_Sem_fundo_1777242203099.png";
 import ownerImage from "@assets/WhatsApp_Image_2026-04-26_at_18.45.59_1777240064953.jpeg";
+import julioThaliaPhoto from "@assets/WhatsApp_Image_2026-04-26_at_19.19.34_1777242327644.jpeg";
+import filmJulioThalia1 from "@assets/film_julio_thalia_1.mp4";
+import filmJulioThalia2 from "@assets/film_julio_thalia_2.mp4";
+import filmJulioThalia3 from "@assets/film_julio_thalia_3.mp4";
+import filmJulioThalia4 from "@assets/film_julio_thalia_4.mp4";
 
 import heroSilhouettes from "@/assets/images/hero-silhouettes.png";
 import ringsImage from "@/assets/images/rings.png";
@@ -88,22 +93,27 @@ const ADDONS = [
   },
 ];
 
-const FEATURED_FILMS = [
-  { couple: "Júlia & Rafael", city: "Campos do Jordão · SP", image: heroSilhouettes },
-  { couple: "Marina & Lucas", city: "Trancoso · BA", image: laceImage },
-  { couple: "Beatriz & Pedro", city: "Búzios · RJ", image: champagneImage },
-  { couple: "Carolina & Tiago", city: "Tiradentes · MG", image: vowsImage },
-  { couple: "Helena & Felipe", city: "Holambra · SP", image: ringsImage },
-  { couple: "Antonia & Gabriel", city: "Brotas · SP", image: details1 },
+type FeaturedFilm = {
+  couple: string;
+  scene: string;
+  video?: string;
+  poster?: string;
+};
+
+const FEATURED_FILMS: FeaturedFilm[] = [
+  { couple: "Julio & Thalia", scene: "Cerimônia ao ar livre", video: filmJulioThalia1, poster: julioThaliaPhoto },
+  { couple: "Julio & Thalia", scene: "Entrada da noiva", video: filmJulioThalia2, poster: julioThaliaPhoto },
+  { couple: "Julio & Thalia", scene: "Votos no altar", video: filmJulioThalia3, poster: julioThaliaPhoto },
+  { couple: "Julio & Thalia", scene: "Primeira dança", video: filmJulioThalia4, poster: julioThaliaPhoto },
 ];
 
 const TESTIMONIAL_PHOTOS = [
+  { src: julioThaliaPhoto, label: "Julio & Thalia" },
   { src: heroSilhouettes, label: "Júlia & Rafael" },
   { src: champagneImage, label: "Marina & Lucas" },
   { src: laceImage, label: "Beatriz & Pedro" },
   { src: vowsImage, label: "Carolina & Tiago" },
   { src: ringsImage, label: "Helena & Felipe" },
-  { src: details2, label: "Antonia & Gabriel" },
 ];
 
 const TRUST_ICONS = [
@@ -126,11 +136,42 @@ const NAV_LINKS = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const featuredRef = useRef<HTMLDivElement>(null);
+  const videoRefs = useRef<HTMLVideoElement[]>([]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const videos = videoRefs.current.filter(Boolean);
+    if (videos.length === 0) return;
+
+    const tryPlay = (v: HTMLVideoElement) => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const v = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            tryPlay(v);
+          } else {
+            v.pause();
+          }
+        });
+      },
+      { rootMargin: "200px", threshold: 0.1 },
+    );
+
+    videos.forEach((v) => {
+      io.observe(v);
+      tryPlay(v);
+    });
+    return () => io.disconnect();
   }, []);
 
   const scrollFeatured = (dir: 1 | -1) => {
@@ -161,7 +202,7 @@ export default function Home() {
             <img
               src={logoImage}
               alt="Storymaker de Casamento"
-              className={`h-10 md:h-12 w-auto transition-all duration-500 ${
+              className={`h-14 md:h-16 w-auto transition-all duration-500 ${
                 scrolled ? "" : "brightness-0 invert"
               }`}
             />
@@ -284,25 +325,44 @@ export default function Home() {
             ref={featuredRef}
             className="no-scrollbar flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 px-6"
           >
-            {FEATURED_FILMS.map((f) => (
+            {FEATURED_FILMS.map((f, i) => (
               <a
-                key={f.couple}
+                key={`${f.couple}-${i}`}
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="shrink-0 w-[260px] md:w-[300px] snap-start group"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-[#1a1410]/5">
-                  <img
-                    src={f.image}
-                    alt={f.couple}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  {f.video ? (
+                    <video
+                      ref={(el) => {
+                        if (el) videoRefs.current[i] = el;
+                      }}
+                      src={f.video}
+                      poster={f.poster}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <img
+                      src={f.poster}
+                      alt={f.couple}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
+                  <div className="absolute top-3 right-3 smallcaps text-[10px] tracking-[0.25em] text-[#fdfaf5] bg-[#0c0a08]/70 backdrop-blur-sm px-2.5 py-1">
+                    filme
+                  </div>
                 </div>
                 <div className="pt-4">
                   <h3 className="text-[20px] font-light italic">{f.couple}</h3>
                   <p className="smallcaps text-[11px] tracking-[0.2em] text-[#6a5a48] mt-1">
-                    {f.city}
+                    {f.scene}
                   </p>
                 </div>
               </a>
@@ -534,7 +594,7 @@ export default function Home() {
               <img
                 src={logoImage}
                 alt="Storymaker"
-                className="h-14 w-auto brightness-0 invert"
+                className="h-20 w-auto brightness-0 invert"
               />
               <p className="mt-6 text-[14px] leading-[1.8] font-light text-[#fdfaf5]/70">
                 Filmes de casamento autorais. Captação em 4K, edição
