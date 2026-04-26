@@ -107,15 +107,6 @@ const FEATURED_FILMS: FeaturedFilm[] = [
   { couple: "Julio & Thalia", scene: "Primeira dança", video: filmJulioThalia4, poster: julioThaliaPhoto },
 ];
 
-const TRUST_ICONS = [
-  { title: "atendemos todo o Brasil", desc: "Disponíveis para destination weddings em qualquer cidade." },
-  { title: "olhar cinematográfico", desc: "Câmeras e lentes profissionais, áudio cuidadosamente tratado." },
-  { title: "edição autoral", desc: "Cada filme é montado à mão, com narrativa pensada para o casal." },
-  { title: "atendimento exclusivo", desc: "Poucos casais por ano para entregarmos cada filme com a atenção que ele merece." },
-  { title: "entrega em até 90 dias", desc: "Trailer em 7 dias, filme completo em até 3 meses." },
-  { title: "resposta em 1 hora", desc: "Atendimento direto pelo WhatsApp, sem intermediários." },
-];
-
 const NAV_LINKS = [
   { href: "#colecoes", label: "Coleções" },
   { href: "#complementos", label: "Complementos" },
@@ -514,24 +505,6 @@ export default function Home() {
             >
               agendar uma conversa
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* INFOBAR — 6 trust signals */}
-      <section className="border-t border-[#1a1410]/10 py-16 md:py-20">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-            {TRUST_ICONS.map((t) => (
-              <div key={t.title} className="text-center">
-                <p className="smallcaps text-[12px] tracking-[0.22em] text-[#1a1410]">
-                  {t.title}
-                </p>
-                <p className="mt-2 text-[12.5px] leading-[1.6] font-light text-[#5a4f43]">
-                  {t.desc}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
