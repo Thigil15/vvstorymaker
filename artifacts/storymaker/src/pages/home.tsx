@@ -298,10 +298,10 @@ export default function Home() {
           <div className="flex items-end justify-between mb-10">
             <div>
               <p className="smallcaps text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-3">
-                em destaque
+                demonstração
               </p>
-              <h2 className="text-[clamp(1.8rem,3.4vw,2.6rem)] font-light">
-                Casamentos que filmamos
+              <h2 className="text-[clamp(1.8rem,3.4vw,2.6rem)] font-light italic">
+                uma pequena amostra do nosso olhar
               </h2>
             </div>
             <div className="hidden md:flex items-center gap-2">
@@ -332,9 +332,9 @@ export default function Home() {
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 w-[260px] md:w-[300px] snap-start group"
+                className="shrink-0 w-[240px] md:w-[300px] lg:w-[340px] snap-start group"
               >
-                <div className="relative aspect-[3/4] overflow-hidden bg-[#1a1410]/5">
+                <div className="relative aspect-[9/16] overflow-hidden bg-[#0c0a08]">
                   {f.video ? (
                     <video
                       ref={(el) => {
@@ -395,9 +395,7 @@ export default function Home() {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
                 variants={fadeUp}
-                className={`group relative block aspect-[16/11] md:aspect-[16/10] overflow-hidden ${
-                  pkg.featured ? "md:col-span-2 md:aspect-[24/9]" : ""
-                }`}
+                className="group relative block aspect-[16/11] md:aspect-[16/10] overflow-hidden"
               >
                 <img
                   src={pkg.image}
