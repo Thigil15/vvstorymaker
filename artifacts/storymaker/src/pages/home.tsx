@@ -284,11 +284,14 @@ export default function Home() {
         <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-light leading-tight">
           Made with love by <span className="italic">Storymaker</span>
         </h1>
-        <p className="mt-8 text-[17px] md:text-[18px] leading-[1.85] font-light text-[#3b322a]">
-          Somos especialistas em filmar casamentos com olhar autoral, captação
-          em 4K e edição cinematográfica. Cada filme é construído à mão por uma
-          equipe pequena e dedicada — para que você possa, anos depois, sentar
-          no sofá, apertar play e voltar exatamente para aquele dia.
+        <p className="mt-8 text-[17px] md:text-[18px] leading-[1.9] font-light text-[#3b322a]">
+          Acreditamos que cada casamento merece ser contado com a delicadeza
+          de um filme — não documentado, mas{" "}
+          <span className="italic">eternizado</span>. Trabalhamos com poucos
+          casais por ano, com tempo, escuta e olhar atento, para que cada
+          gesto, cada respiração e cada lágrima permaneçam exatamente como
+          aconteceram. O que entregamos não é um vídeo. É a sua história,
+          guardada para sempre.
         </p>
       </motion.section>
 
