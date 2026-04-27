@@ -26,9 +26,9 @@ The project is structured as a pnpm monorepo.
 - **Typography:** Spectral and Spectral SC small caps.
 - **Interactive Elements:**
     - Scroll-triggered animations and parallax effects using `framer-motion` for a cinematic feel.
-    - Custom `WordReveal` and `MarqueeStrip` components for dynamic text and section dividers.
+    - Custom `WordReveal` component for dynamic text reveals (line-by-line, in-view).
+    - Films section: cream background, all cards rendered uniformly (no scale/opacity differentiation, no active-card detection, no pagination dots, no per-card counter) — they exist purely so the visitor can pick which one to watch. Cards open an accessible lightbox modal (focus trap, Esc close, body scroll lock).
     - Animated gold gradient scroll progress bar at the top of the page.
-    - Featured films carousel with active card detection, visual scaling for inactive cards, and a lightbox modal for video playback.
     - Hover effects on cards, buttons, and CTAs for enhanced interactivity.
 - **Asset Handling:** Images and videos are included directly. Videos are served via a lightbox modal as static poster cards, with native controls and `playsInline`.
 - **Accessibility:** `MotionConfig reducedMotion="user"` is implemented to respect user preferences for reduced motion. The film lightbox is a fully accessible modal: `role="dialog"`, `aria-modal="true"`, `aria-labelledby="lightbox-title"`, initial focus moved to the close button on open, Tab/Shift+Tab focus trap inside the modal, focus restored to the originating card on close, and Escape/backdrop-click/X-button close paths.
@@ -39,8 +39,8 @@ The project is structured as a pnpm monorepo.
 - **Static Site Generation:** The `storymaker` artifact is a pure static Single-Page Application (SPA) with no runtime backend, designed for deployment on platforms like GitHub Pages.
 - **SPA Fallback:** `index.html` is copied to `404.html` to handle client-side routing on GitHub Pages.
 - **Vite Configuration:** Uses a functional `vite.config.ts` to handle build processes, `BASE_PATH` for deployment flexibility, and conditional plugin loading for development vs. production environments.
-- **Scroll Observation:** `IntersectionObserver` and `ResizeObserver` are used for carousel functionality and active card detection.
-- **State Management:** Local component state for UI interactions (e.g., `activeFilm`, `lightboxFilm`).
+- **Scroll Observation:** `IntersectionObserver` is used for in-view reveal animations and a global scroll listener drives the gold scroll-progress bar at the top of the page.
+- **State Management:** Local component state for UI interactions (e.g., `lightboxFilm`).
 - **Body Scroll Lock:** Implemented for lightbox modals to prevent background scrolling.
 
 # External Dependencies

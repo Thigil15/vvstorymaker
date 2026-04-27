@@ -113,33 +113,6 @@ function WordReveal({
   );
 }
 
-/** Continuous gold marquee strip used as a section divider. */
-function MarqueeStrip({ items }: { items: string[] }) {
-  const sequence = [...items, ...items, ...items];
-  return (
-    <div
-      aria-hidden
-      className="relative overflow-hidden border-y border-[#1a1410]/10 bg-[#0c0a08] py-4"
-    >
-      <motion.div
-        className="flex whitespace-nowrap"
-        animate={{ x: ["0%", "-33.333%"] }}
-        transition={{ duration: 38, ease: "linear", repeat: Infinity }}
-      >
-        {sequence.map((word, i) => (
-          <span
-            key={i}
-            className="smallcaps text-[12px] md:text-[13px] tracking-[0.4em] text-[#d8b87a]/80 mx-8 md:mx-12 inline-flex items-center"
-          >
-            {word}
-            <span className="ml-8 md:ml-12 text-[#d8b87a]/40">✦</span>
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
 type Pkg = {
   name: string;
   price: string;
@@ -235,7 +208,6 @@ const NAV_LINKS = [
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeFilm, setActiveFilm] = useState(0);
   const [lightboxFilm, setLightboxFilm] = useState<number | null>(null);
   const featuredRef = useRef<HTMLDivElement>(null);
   const filmCardRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -266,64 +238,6 @@ export default function Home() {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Deterministic active-card detection: snap to whichever card's center is
-  // closest to the carousel's visible center. Runs once per animation frame.
-  useEffect(() => {
-    const el = featuredRef.current;
-    if (!el) return;
-
-    let raf = 0;
-    const compute = () => {
-      raf = 0;
-      const cards = filmCardRefs.current.filter(Boolean) as HTMLButtonElement[];
-      if (cards.length === 0) return;
-
-      // Boundary cases: when the carousel is parked at the very start or end,
-      // snap-center can't actually center the first/last card, so the
-      // "closest to viewport center" heuristic would mislabel them. Pin the
-      // active index to the edges in those cases.
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      let bestIdx: number;
-      if (el.scrollLeft <= 2) {
-        bestIdx = 0;
-      } else if (el.scrollLeft >= maxScroll - 2) {
-        bestIdx = cards.length - 1;
-      } else {
-        const center = el.scrollLeft + el.clientWidth / 2;
-        let bestDist = Infinity;
-        bestIdx = 0;
-        cards.forEach((c, i) => {
-          const cardCenter = c.offsetLeft + c.offsetWidth / 2;
-          const dist = Math.abs(cardCenter - center);
-          if (dist < bestDist) {
-            bestDist = dist;
-            bestIdx = i;
-          }
-        });
-      }
-      setActiveFilm((prev) => (prev === bestIdx ? prev : bestIdx));
-    };
-
-    const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(compute);
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    const ro = new ResizeObserver(() => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(compute);
-    });
-    ro.observe(el);
-    compute();
-
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      ro.disconnect();
-      if (raf) cancelAnimationFrame(raf);
-    };
   }, []);
 
   // Lightbox: lock body scroll, close on Esc, focus trap, and restore focus
@@ -385,12 +299,6 @@ export default function Home() {
     const el = featuredRef.current;
     if (!el) return;
     el.scrollBy({ left: dir * (el.clientWidth * 0.7), behavior: "smooth" });
-  };
-
-  const scrollToFilm = (idx: number) => {
-    const card = filmCardRefs.current[idx];
-    if (!card) return;
-    card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   };
 
   return (
@@ -558,18 +466,6 @@ export default function Home() {
         </motion.p>
       </section>
 
-      {/* MARQUEE — gold ticker between intro and films */}
-      <MarqueeStrip
-        items={[
-          "feita para reviver",
-          "filmes de casamento",
-          "feitos com afeto",
-          "olhar autoral",
-          "atendimento direto",
-          "celebrações inesquecíveis",
-        ]}
-      />
-
       {/* FEATURED FILMS — cinematic carousel (poster + play, opens lightbox) */}
       <section
         id="casais"
@@ -612,8 +508,7 @@ export default function Home() {
               >
                 <span className="block w-8 h-px bg-[#8a6a2e]" />
                 <span>
-                  filme {String(activeFilm + 1).padStart(2, "0")} /{" "}
-                  {String(FEATURED_FILMS.length).padStart(2, "0")}
+                  {FEATURED_FILMS.length} filmes — toque para assistir
                 </span>
               </motion.div>
             </div>
@@ -650,7 +545,6 @@ export default function Home() {
             style={{ scrollPaddingLeft: 20 }}
           >
             {FEATURED_FILMS.map((f, i) => {
-              const isActive = activeFilm === i;
               return (
                 <motion.button
                   type="button"
@@ -672,11 +566,7 @@ export default function Home() {
                     delay: i * 0.08,
                     ease: EASE_CINEMATIC,
                   }}
-                  animate={{
-                    scale: isActive ? 1 : 0.94,
-                    opacity: isActive ? 1 : 0.55,
-                  }}
-                  className="shrink-0 w-[82vw] sm:w-[300px] md:w-[320px] lg:w-[340px] snap-center group block text-left"
+                  className="shrink-0 w-[82vw] sm:w-[300px] md:w-[320px] lg:w-[340px] snap-start group block text-left"
                   style={{ transformOrigin: "center" }}
                 >
                   <div className="relative aspect-[9/16] max-h-[72vh] overflow-hidden bg-[#1a1410] shadow-[0_20px_60px_-20px_rgba(26,20,16,0.35)]">
@@ -739,48 +629,15 @@ export default function Home() {
                       </p>
                     </div>
 
-                    {/* Active highlight */}
-                    <AnimatePresence>
-                      {isActive && (
-                        <motion.span
-                          aria-hidden
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.6 }}
-                          className="absolute inset-0 ring-1 ring-[#8a6a2e]/40 pointer-events-none"
-                        />
-                      )}
-                    </AnimatePresence>
                   </div>
                 </motion.button>
               );
             })}
           </div>
 
-          {/* Pagination dots */}
-          <div className="flex items-center justify-center gap-2 mt-7 md:mt-9">
-            {FEATURED_FILMS.map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Ir para o filme ${i + 1}`}
-                onClick={() => scrollToFilm(i)}
-                className="group p-2 -m-2"
-              >
-                <span
-                  className={`block h-px transition-all duration-500 ${
-                    activeFilm === i
-                      ? "w-10 bg-[#1a1410]"
-                      : "w-5 bg-[#1a1410]/25 group-hover:bg-[#1a1410]/55"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
-
           {/* Hint for mobile users */}
-          <p className="md:hidden text-center smallcaps text-[10px] tracking-[0.3em] text-[#5a4f43]/60 mt-4">
-            toque para assistir
+          <p className="md:hidden text-center smallcaps text-[10px] tracking-[0.3em] text-[#5a4f43]/60 mt-6">
+            arraste para o lado e toque para assistir
           </p>
         </div>
       </section>
