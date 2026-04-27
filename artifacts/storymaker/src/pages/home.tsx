@@ -16,7 +16,6 @@ import vowsImage from "@/assets/images/vows.png";
 import laceImage from "@/assets/images/lace.png";
 import details1 from "@/assets/images/details-1.png";
 import details2 from "@/assets/images/details-2.png";
-import heroAlt from "@/assets/images/hero.png";
 
 const WHATSAPP_LINK = "https://wa.me/5512982355909";
 const WHATSAPP_TEXT =
@@ -208,7 +207,8 @@ export default function Home() {
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
-              className={`hidden md:inline-block text-[12px] tracking-[0.25em] uppercase border px-5 py-2.5 transition-colors ${
+              aria-label="Falar no WhatsApp"
+              className={`smallcaps text-[10px] md:text-[12px] tracking-[0.22em] md:tracking-[0.25em] uppercase border px-3.5 md:px-5 py-2 md:py-2.5 transition-colors ${
                 scrolled
                   ? "border-[#1a1410] text-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5]"
                   : "border-[#fdfaf5] text-[#fdfaf5] hover:bg-[#fdfaf5] hover:text-[#1a1410]"
@@ -225,6 +225,7 @@ export default function Home() {
         <img
           src={heroSilhouettes}
           alt="Silhueta de noivos entre velas"
+          fetchPriority="high"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
@@ -325,13 +326,14 @@ export default function Home() {
                       muted
                       loop
                       playsInline
-                      preload="metadata"
+                      preload="none"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <img
                       src={f.poster}
                       alt={f.couple}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   )}
@@ -379,12 +381,13 @@ export default function Home() {
                 <img
                   src={pkg.image}
                   alt={pkg.name}
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
                 {pkg.featured && (
                   <div className="absolute top-6 left-6 smallcaps text-[10px] tracking-[0.3em] text-[#fdfaf5] border border-[#fdfaf5]/60 px-3 py-1.5">
-                    mais escolhido
+                    coleção completa
                   </div>
                 )}
 
@@ -423,6 +426,7 @@ export default function Home() {
               <img
                 src={champagneImage}
                 alt="Detalhes do casamento"
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -455,6 +459,7 @@ export default function Home() {
                   <img
                     src={a.image}
                     alt={a.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
@@ -479,6 +484,7 @@ export default function Home() {
             <img
               src={ownerImage}
               alt="Fotógrafo e diretor da Storymaker"
+              loading="lazy"
               className="w-full h-full object-cover"
             />
           </div>
@@ -517,11 +523,12 @@ export default function Home() {
               <img
                 src={logoImage}
                 alt="Storymaker"
+                loading="lazy"
                 className="h-20 w-auto brightness-0 invert"
               />
               <p className="mt-6 text-[14px] leading-[1.8] font-light text-[#fdfaf5]/70">
-                Filmes de casamento autorais. Captação em 4K, edição
-                cinematográfica e atendimento direto com o diretor.
+                Filmes de casamento autorais, com olhar cinematográfico e
+                atendimento direto com o diretor.
               </p>
             </div>
 
@@ -570,17 +577,7 @@ export default function Home() {
                     WhatsApp — fale com o diretor
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="https://instagram.com/storymakerdecasamento"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#d8b87a] transition-colors"
-                  >
-                    @storymakerdecasamento
-                  </a>
-                </li>
-                <li className="text-[#fdfaf5]/70">contato@storymakerdecasamento.com.br</li>
+                <li className="text-[#fdfaf5]/70">+55 12 98235-5909</li>
                 <li className="text-[#fdfaf5]/70">Atendemos todo o Brasil</li>
               </ul>
             </div>
