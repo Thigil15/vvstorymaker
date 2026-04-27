@@ -985,7 +985,7 @@ export default function Home() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: EASE_CINEMATIC }}
             onClick={() => setLightboxFilm(null)}
-            className="fixed inset-0 z-[80] bg-[#0c0a08]/92 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 z-[80] bg-[#0c0a08]/92 backdrop-blur-md flex items-center justify-center p-3 md:p-8"
             role="dialog"
             aria-modal="true"
             aria-labelledby="lightbox-title"
@@ -998,7 +998,11 @@ export default function Home() {
                 setLightboxFilm(null);
               }}
               aria-label="Fechar"
-              className="group absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center text-[#fdfaf5] border border-[#fdfaf5]/30 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] transition-all duration-500 z-10"
+              style={{
+                top: "max(0.75rem, env(safe-area-inset-top, 0.75rem))",
+                right: "max(0.75rem, env(safe-area-inset-right, 0.75rem))",
+              }}
+              className="group absolute md:!top-6 md:!right-6 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center text-[#fdfaf5] bg-[#0c0a08]/60 backdrop-blur-sm border border-[#fdfaf5]/30 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] active:bg-[#d8b87a]/80 transition-all duration-300 z-20"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
@@ -1008,7 +1012,10 @@ export default function Home() {
             {/* Player + caption stack — width is derived from the available
                 vertical space so the 9:16 video plus its caption always fit
                 within the viewport (truly centered, no scroll, no clipping).
-                Reserved budget: ~220px for caption + corners + padding. */}
+                Uses 100svh (small viewport height) so the layout stays stable
+                even when the mobile URL bar shows/hides. The 94vw cap keeps a
+                breathing margin on narrow phones. ~180px reserved for caption,
+                corners, and outer padding. */}
             <motion.div
               key={`player-${lightboxFilm}`}
               initial={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -1018,16 +1025,16 @@ export default function Home() {
               onClick={(e) => e.stopPropagation()}
               className="relative flex flex-col items-center"
               style={{
-                width: "min(460px, calc((100dvh - 220px) * 9 / 16))",
+                width: "min(94vw, 460px, calc((100svh - 180px) * 9 / 16))",
               }}
             >
               {/* Player frame — corners are anchored to the video itself,
                   not to the wrapper, so they stay around the picture. */}
               <div className="relative w-full">
-                <span aria-hidden className="absolute -top-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-t border-l border-[#d8b87a]/80 pointer-events-none z-10" />
-                <span aria-hidden className="absolute -top-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-t border-r border-[#d8b87a]/80 pointer-events-none z-10" />
-                <span aria-hidden className="absolute -bottom-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-b border-l border-[#d8b87a]/80 pointer-events-none z-10" />
-                <span aria-hidden className="absolute -bottom-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-b border-r border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -top-2 -left-2 w-5 h-5 md:-top-3 md:-left-3 md:w-8 md:h-8 border-t border-l border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -top-2 -right-2 w-5 h-5 md:-top-3 md:-right-3 md:w-8 md:h-8 border-t border-r border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -bottom-2 -left-2 w-5 h-5 md:-bottom-3 md:-left-3 md:w-8 md:h-8 border-b border-l border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -bottom-2 -right-2 w-5 h-5 md:-bottom-3 md:-right-3 md:w-8 md:h-8 border-b border-r border-[#d8b87a]/80 pointer-events-none z-10" />
 
                 <div className="relative w-full aspect-[9/16] overflow-hidden bg-[#0c0a08] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]">
                   <video
@@ -1051,14 +1058,14 @@ export default function Home() {
               </div>
 
               {/* Caption + WhatsApp CTA */}
-              <div className="mt-4 md:mt-5 text-center text-[#fdfaf5] w-full">
+              <div className="mt-3 md:mt-5 text-center text-[#fdfaf5] w-full">
                 <p
                   id="lightbox-title"
                   className="smallcaps text-[10px] md:text-[11px] tracking-[0.35em] text-[#d8b87a]"
                 >
                   {FEATURED_FILMS[lightboxFilm].couple}
                 </p>
-                <p className="mt-1 text-[15px] md:text-[17px] font-light italic leading-tight">
+                <p className="mt-1 text-[14px] md:text-[17px] font-light italic leading-tight">
                   {FEATURED_FILMS[lightboxFilm].scene}
                 </p>
                 <a
@@ -1067,7 +1074,7 @@ export default function Home() {
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group mt-3 md:mt-4 inline-flex items-center gap-3 smallcaps text-[10px] md:text-[11px] tracking-[0.3em] border border-[#fdfaf5]/40 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] text-[#fdfaf5] transition-colors min-h-[44px] px-5 md:px-6 py-3"
+                  className="group mt-3 md:mt-4 inline-flex items-center gap-3 smallcaps text-[10px] md:text-[11px] tracking-[0.3em] border border-[#fdfaf5]/40 hover:border-[#d8b87a] hover:bg-[#d8b87a] active:bg-[#d8b87a] hover:text-[#0c0a08] active:text-[#0c0a08] text-[#fdfaf5] transition-colors min-h-[44px] px-5 md:px-6 py-2.5 md:py-3"
                 >
                   conversar sobre este filme
                   <span className="block w-4 h-px bg-current transition-all duration-500 group-hover:w-8" />
