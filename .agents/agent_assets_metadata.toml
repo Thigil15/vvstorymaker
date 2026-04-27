@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "gRMkqrYEbP4lEP4t96pod"
@@ -48,3 +47,15 @@ id = "YQOLmLw6sas6MN94R_SSD"
 uri = "file://artifacts/storymaker/src/assets/images/lace.png"
 type = "image"
 title = "Wedding dress lace detail"
+
+[[outputs]]
+id = "XoPSmDFhvft6Lbqh1beh_"
+uri = "file://artifacts/storymaker/public/favicon.png"
+type = "image"
+title = "favicon 256x256 (transparente)"
+
+[[outputs]]
+id = "KqA1d1MGnWDULpbD6Pyux"
+uri = "file://artifacts/storymaker/public/apple-touch-icon.png"
+type = "image"
+title = "apple-touch-icon 180x180 (transparente)"
