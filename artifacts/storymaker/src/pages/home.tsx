@@ -23,9 +23,9 @@ const waHref = (text: string) =>
 
 const WA_MESSAGES = {
   generic:
-    "Olá! Vim pelo site da Storymaker e gostaria de conversar sobre o filme do meu casamento.",
+    "Olá! Vim pelo site vvstorymaker e gostaria de conversar sobre o filme do meu casamento.",
   about:
-    "Olá! Vim pelo site da Storymaker e gostaria de agendar uma conversa para falar sobre o filme do meu casamento.",
+    "Olá! Vim pelo site vvstorymaker e gostaria de agendar uma conversa para falar sobre o filme do meu casamento.",
 };
 
 const WHATSAPP_HREF = waHref(WA_MESSAGES.generic);
@@ -326,7 +326,7 @@ export default function Home() {
               <a
                 key={`${f.couple}-${i}`}
                 href={waHref(
-                  `Olá! Vim pelo site da Storymaker, vi o filme do casal ${f.couple} (cena "${f.scene}") e gostaria de conversar sobre o meu casamento.`,
+                  `Olá! Vim pelo site vvstorymaker, vi o filme do casal ${f.couple} (cena "${f.scene}") e gostaria de conversar sobre o meu casamento.`,
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -388,7 +388,7 @@ export default function Home() {
               <motion.a
                 key={pkg.name}
                 href={waHref(
-                  `Olá! Vim pelo site da Storymaker e tenho interesse na coleção ${pkg.name}. Pode me passar mais detalhes?`,
+                  `Olá! Vim pelo site vvstorymaker e tenho interesse na coleção ${pkg.name}. Pode me passar mais detalhes?`,
                 )}
                 target="_blank"
                 rel="noopener noreferrer"

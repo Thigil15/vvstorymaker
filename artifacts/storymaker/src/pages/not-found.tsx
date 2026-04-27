@@ -2,7 +2,7 @@ import logoImage from "@assets/Logo_StoryMaker_Casamento_Sem_fundo_1777242203099
 
 const WHATSAPP_LINK = "https://wa.me/5512982355909";
 const WHATSAPP_TEXT =
-  "Olá! Vim pelo site da Storymaker, mas a página que eu procurava não foi encontrada. Pode me ajudar?";
+  "Olá! Vim pelo site vvstorymaker, mas a página que eu procurava não foi encontrada. Pode me ajudar?";
 const WHATSAPP_HREF = `${WHATSAPP_LINK}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
 
 export default function NotFound() {
