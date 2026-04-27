@@ -236,11 +236,13 @@ const NAV_LINKS = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFilm, setActiveFilm] = useState(0);
-  const [filmsSectionVisible, setFilmsSectionVisible] = useState(false);
+  const [lightboxFilm, setLightboxFilm] = useState<number | null>(null);
   const featuredRef = useRef<HTMLDivElement>(null);
-  const filmCardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const videoRefs = useRef<HTMLVideoElement[]>([]);
+  const filmCardRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const heroRef = useRef<HTMLElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
+  const lightboxCloseRef = useRef<HTMLButtonElement>(null);
+  const lightboxOpenerIdxRef = useRef<number | null>(null);
 
   // Page scroll progress (smoothed) — drives the gold progress bar at the top.
   const { scrollYProgress } = useScroll();
@@ -275,19 +277,32 @@ export default function Home() {
     let raf = 0;
     const compute = () => {
       raf = 0;
-      const cards = filmCardRefs.current.filter(Boolean) as HTMLAnchorElement[];
+      const cards = filmCardRefs.current.filter(Boolean) as HTMLButtonElement[];
       if (cards.length === 0) return;
-      const center = el.scrollLeft + el.clientWidth / 2;
-      let bestIdx = 0;
-      let bestDist = Infinity;
-      cards.forEach((c, i) => {
-        const cardCenter = c.offsetLeft + c.offsetWidth / 2;
-        const dist = Math.abs(cardCenter - center);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIdx = i;
-        }
-      });
+
+      // Boundary cases: when the carousel is parked at the very start or end,
+      // snap-center can't actually center the first/last card, so the
+      // "closest to viewport center" heuristic would mislabel them. Pin the
+      // active index to the edges in those cases.
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      let bestIdx: number;
+      if (el.scrollLeft <= 2) {
+        bestIdx = 0;
+      } else if (el.scrollLeft >= maxScroll - 2) {
+        bestIdx = cards.length - 1;
+      } else {
+        const center = el.scrollLeft + el.clientWidth / 2;
+        let bestDist = Infinity;
+        bestIdx = 0;
+        cards.forEach((c, i) => {
+          const cardCenter = c.offsetLeft + c.offsetWidth / 2;
+          const dist = Math.abs(cardCenter - center);
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestIdx = i;
+          }
+        });
+      }
       setActiveFilm((prev) => (prev === bestIdx ? prev : bestIdx));
     };
 
@@ -311,35 +326,60 @@ export default function Home() {
     };
   }, []);
 
-  // Track whether the films section is on-screen — videos only auto-play
-  // when the user is actually looking at them.
+  // Lightbox: lock body scroll, close on Esc, focus trap, and restore focus
+  // to the originating card on close (full a11y modal lifecycle).
   useEffect(() => {
-    const section = document.getElementById("casais");
-    if (!section) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => setFilmsSectionVisible(entry.isIntersecting));
-      },
-      { threshold: 0.15 },
-    );
-    io.observe(section);
-    return () => io.disconnect();
-  }, []);
+    if (lightboxFilm === null) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-  // Drive video playback: only ONE video plays at a time (the active card),
-  // and only when the films section is actually visible. With preload="none"
-  // this also means only one video downloads at a time on mobile.
-  useEffect(() => {
-    videoRefs.current.forEach((v, i) => {
-      if (!v) return;
-      if (filmsSectionVisible && i === activeFilm) {
-        const p = v.play();
-        if (p && typeof p.catch === "function") p.catch(() => {});
-      } else {
-        v.pause();
-      }
+    // Move focus into the modal so keyboard / screen-reader users land here.
+    const focusRaf = requestAnimationFrame(() => {
+      lightboxCloseRef.current?.focus();
     });
-  }, [activeFilm, filmsSectionVisible]);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxFilm(null);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      // Focus trap: keep Tab cycling within the modal.
+      const root = lightboxRef.current;
+      if (!root) return;
+      const focusable = Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'button, [href], video, input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter(
+        (el) =>
+          !el.hasAttribute("disabled") && el.getAttribute("tabindex") !== "-1",
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      cancelAnimationFrame(focusRaf);
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+      // Restore focus to the card the user clicked to open the lightbox.
+      const openerIdx = lightboxOpenerIdxRef.current;
+      if (openerIdx !== null) {
+        filmCardRefs.current[openerIdx]?.focus?.();
+      }
+    };
+  }, [lightboxFilm]);
 
   const scrollFeatured = (dir: 1 | -1) => {
     const el = featuredRef.current;
@@ -530,19 +570,19 @@ export default function Home() {
         ]}
       />
 
-      {/* FEATURED FILMS — cinematic carousel */}
+      {/* FEATURED FILMS — cinematic carousel (poster + play, opens lightbox) */}
       <section
         id="casais"
-        className="relative bg-[#0c0a08] text-[#fdfaf5] py-16 md:py-28 overflow-hidden"
+        className="relative py-16 md:py-28 overflow-hidden"
       >
-        {/* Soft gold ambient glow at top-left and bottom-right */}
+        {/* Subtle warm ambient glows on cream bg */}
         <div
           aria-hidden
-          className="absolute -top-40 -left-40 w-[420px] h-[420px] rounded-full bg-[#8a6a2e]/15 blur-[120px] pointer-events-none"
+          className="absolute -top-32 -left-32 w-[380px] h-[380px] rounded-full bg-[#8a6a2e]/10 blur-[120px] pointer-events-none"
         />
         <div
           aria-hidden
-          className="absolute -bottom-40 -right-40 w-[520px] h-[520px] rounded-full bg-[#b8923f]/10 blur-[140px] pointer-events-none"
+          className="absolute -bottom-32 -right-32 w-[420px] h-[420px] rounded-full bg-[#b8923f]/10 blur-[140px] pointer-events-none"
         />
 
         <div className="relative max-w-[1400px] mx-auto px-5 md:px-12">
@@ -556,7 +596,7 @@ export default function Home() {
             <div>
               <motion.p
                 variants={staggerItem}
-                className="smallcaps text-[11px] md:text-[12px] tracking-[0.35em] text-[#d8b87a] mb-3 md:mb-4"
+                className="smallcaps text-[11px] md:text-[12px] tracking-[0.35em] text-[#8a6a2e] mb-3 md:mb-4"
               >
                 demonstração
               </motion.p>
@@ -568,18 +608,24 @@ export default function Home() {
               </motion.h2>
               <motion.div
                 variants={staggerItem}
-                className="mt-5 flex items-center gap-3 text-[#fdfaf5]/55 text-[12px] md:text-[13px] tracking-[0.2em] uppercase"
+                className="mt-5 flex items-center gap-3 text-[#5a4f43] text-[12px] md:text-[13px] tracking-[0.2em] uppercase"
               >
-                <span className="block w-8 h-px bg-[#d8b87a]/60" />
-                <span>filme {String(activeFilm + 1).padStart(2, "0")} / {String(FEATURED_FILMS.length).padStart(2, "0")}</span>
+                <span className="block w-8 h-px bg-[#8a6a2e]" />
+                <span>
+                  filme {String(activeFilm + 1).padStart(2, "0")} /{" "}
+                  {String(FEATURED_FILMS.length).padStart(2, "0")}
+                </span>
               </motion.div>
             </div>
 
-            <motion.div variants={staggerItem} className="hidden md:flex items-center gap-3">
+            <motion.div
+              variants={staggerItem}
+              className="hidden md:flex items-center gap-3"
+            >
               <button
                 aria-label="Filme anterior"
                 onClick={() => scrollFeatured(-1)}
-                className="group w-12 h-12 border border-[#fdfaf5]/25 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] text-[#fdfaf5] transition-all duration-500 flex items-center justify-center"
+                className="group w-12 h-12 border border-[#1a1410]/25 hover:border-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5] text-[#1a1410] transition-all duration-500 flex items-center justify-center"
               >
                 <span className="inline-block transition-transform duration-500 group-hover:-translate-x-0.5">
                   ‹
@@ -588,7 +634,7 @@ export default function Home() {
               <button
                 aria-label="Próximo filme"
                 onClick={() => scrollFeatured(1)}
-                className="group w-12 h-12 border border-[#fdfaf5]/25 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] text-[#fdfaf5] transition-all duration-500 flex items-center justify-center"
+                className="group w-12 h-12 border border-[#1a1410]/25 hover:border-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5] text-[#1a1410] transition-all duration-500 flex items-center justify-center"
               >
                 <span className="inline-block transition-transform duration-500 group-hover:translate-x-0.5">
                   ›
@@ -606,17 +652,18 @@ export default function Home() {
             {FEATURED_FILMS.map((f, i) => {
               const isActive = activeFilm === i;
               return (
-                <motion.a
+                <motion.button
+                  type="button"
                   key={`${f.couple}-${i}`}
                   ref={(el) => {
                     filmCardRefs.current[i] = el;
                   }}
                   data-idx={i}
-                  href={waHref(
-                    `Olá! Vim pelo site vvstorymaker, vi o filme do casal ${f.couple} (cena "${f.scene}") e gostaria de conversar sobre o meu casamento.`,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => {
+                    lightboxOpenerIdxRef.current = i;
+                    setLightboxFilm(i);
+                  }}
+                  aria-label={`Assistir ${f.couple} — ${f.scene}`}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
@@ -629,41 +676,52 @@ export default function Home() {
                     scale: isActive ? 1 : 0.94,
                     opacity: isActive ? 1 : 0.55,
                   }}
-                  className="shrink-0 w-[82vw] sm:w-[300px] md:w-[320px] lg:w-[340px] snap-center group block"
+                  className="shrink-0 w-[82vw] sm:w-[300px] md:w-[320px] lg:w-[340px] snap-center group block text-left"
                   style={{ transformOrigin: "center" }}
                 >
-                  <div className="relative aspect-[9/16] max-h-[72vh] overflow-hidden bg-[#1a1410] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
-                    {f.video ? (
-                      <video
-                        ref={(el) => {
-                          if (el) videoRefs.current[i] = el;
-                        }}
-                        src={f.video}
-                        poster={f.poster}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="none"
-                        className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
-                      />
-                    ) : (
-                      <img
-                        src={f.poster}
-                        alt={f.couple}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
-                      />
-                    )}
+                  <div className="relative aspect-[9/16] max-h-[72vh] overflow-hidden bg-[#1a1410] shadow-[0_20px_60px_-20px_rgba(26,20,16,0.35)]">
+                    <img
+                      src={f.poster}
+                      alt={`${f.couple} — ${f.scene}`}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+                    />
+
+                    {/* Soft darken overlay so the play button reads */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/30 transition-opacity duration-500 group-hover:opacity-90"
+                    />
+
+                    {/* Centered play button */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    >
+                      <span className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20">
+                        {/* Outer breathing ring */}
+                        <span className="absolute inset-0 rounded-full border border-[#fdfaf5]/60 transition-all duration-700 group-hover:scale-110 group-hover:border-[#d8b87a]" />
+                        {/* Inner cream disc */}
+                        <span className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#fdfaf5]/95 backdrop-blur-sm transition-transform duration-500 group-hover:scale-105">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="w-5 h-5 md:w-6 md:h-6 text-[#1a1410] translate-x-[1.5px]"
+                            fill="currentColor"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </span>
+                      </span>
+                    </span>
 
                     {/* Gold corner accents */}
                     <span
                       aria-hidden
-                      className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#d8b87a]/70 transition-all duration-500 group-hover:w-8 group-hover:h-8"
+                      className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#d8b87a]/80 transition-all duration-500 group-hover:w-8 group-hover:h-8"
                     />
                     <span
                       aria-hidden
-                      className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#d8b87a]/70 transition-all duration-500 group-hover:w-8 group-hover:h-8"
+                      className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#d8b87a]/80 transition-all duration-500 group-hover:w-8 group-hover:h-8"
                     />
 
                     {/* "filme" tag */}
@@ -671,23 +729,17 @@ export default function Home() {
                       filme
                     </div>
 
-                    {/* Bottom gradient + scene info that slides up on hover */}
-                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 bg-gradient-to-t from-[#0c0a08] via-[#0c0a08]/70 to-transparent">
+                    {/* Bottom info strip */}
+                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
                       <p className="smallcaps text-[10px] md:text-[11px] tracking-[0.3em] text-[#d8b87a]">
                         {f.couple}
                       </p>
                       <p className="mt-1.5 text-[15px] md:text-[16px] font-light italic text-[#fdfaf5]">
                         {f.scene}
                       </p>
-                      <div className="mt-3 flex items-center gap-2 text-[#fdfaf5]/0 group-hover:text-[#fdfaf5]/90 transition-colors duration-500">
-                        <span className="smallcaps text-[10px] tracking-[0.25em]">
-                          conversar pelo whatsapp
-                        </span>
-                        <span className="block w-6 h-px bg-[#d8b87a] transition-all duration-500 group-hover:w-10" />
-                      </div>
                     </div>
 
-                    {/* Active glow ring */}
+                    {/* Active highlight */}
                     <AnimatePresence>
                       {isActive && (
                         <motion.span
@@ -696,17 +748,17 @@ export default function Home() {
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.6 }}
-                          className="absolute inset-0 ring-1 ring-[#d8b87a]/30 pointer-events-none"
+                          className="absolute inset-0 ring-1 ring-[#8a6a2e]/40 pointer-events-none"
                         />
                       )}
                     </AnimatePresence>
                   </div>
-                </motion.a>
+                </motion.button>
               );
             })}
           </div>
 
-          {/* Pagination dots — visible on all sizes, centered below */}
+          {/* Pagination dots */}
           <div className="flex items-center justify-center gap-2 mt-7 md:mt-9">
             {FEATURED_FILMS.map((_, i) => (
               <button
@@ -718,8 +770,8 @@ export default function Home() {
                 <span
                   className={`block h-px transition-all duration-500 ${
                     activeFilm === i
-                      ? "w-10 bg-[#d8b87a]"
-                      : "w-5 bg-[#fdfaf5]/30 group-hover:bg-[#fdfaf5]/60"
+                      ? "w-10 bg-[#1a1410]"
+                      : "w-5 bg-[#1a1410]/25 group-hover:bg-[#1a1410]/55"
                   }`}
                 />
               </button>
@@ -727,8 +779,8 @@ export default function Home() {
           </div>
 
           {/* Hint for mobile users */}
-          <p className="md:hidden text-center smallcaps text-[10px] tracking-[0.3em] text-[#fdfaf5]/40 mt-4">
-            arraste para o lado
+          <p className="md:hidden text-center smallcaps text-[10px] tracking-[0.3em] text-[#5a4f43]/60 mt-4">
+            toque para assistir
           </p>
         </div>
       </section>
@@ -1064,6 +1116,101 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* FILM LIGHTBOX — elegant overlay player */}
+      <AnimatePresence>
+        {lightboxFilm !== null && (
+          <motion.div
+            key="lightbox"
+            ref={lightboxRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: EASE_CINEMATIC }}
+            onClick={() => setLightboxFilm(null)}
+            className="fixed inset-0 z-[80] bg-[#0c0a08]/92 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="lightbox-title"
+          >
+            {/* Close button */}
+            <button
+              ref={lightboxCloseRef}
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxFilm(null);
+              }}
+              aria-label="Fechar"
+              className="group absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center text-[#fdfaf5] border border-[#fdfaf5]/30 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] transition-all duration-500 z-10"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+
+            {/* Player container — stop propagation so clicking video doesn't close */}
+            <motion.div
+              key={`player-${lightboxFilm}`}
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.55, ease: EASE_CINEMATIC }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-[420px] md:max-w-[460px]"
+            >
+              {/* Gold corner accents around the player */}
+              <span aria-hidden className="absolute -top-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-t border-l border-[#d8b87a]/80 pointer-events-none" />
+              <span aria-hidden className="absolute -top-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-t border-r border-[#d8b87a]/80 pointer-events-none" />
+              <span aria-hidden className="absolute -bottom-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-b border-l border-[#d8b87a]/80 pointer-events-none" />
+              <span aria-hidden className="absolute -bottom-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-b border-r border-[#d8b87a]/80 pointer-events-none" />
+
+              <div className="relative aspect-[9/16] max-h-[82vh] mx-auto overflow-hidden bg-[#0c0a08] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]">
+                <video
+                  key={FEATURED_FILMS[lightboxFilm].video}
+                  src={FEATURED_FILMS[lightboxFilm].video ?? undefined}
+                  poster={FEATURED_FILMS[lightboxFilm].poster}
+                  autoPlay
+                  controls
+                  playsInline
+                  preload="auto"
+                  onCanPlay={(e) => {
+                    // Some browsers block autoplay even when muted is omitted; we
+                    // try once and stay quiet if blocked — controls are visible.
+                    const v = e.currentTarget;
+                    const p = v.play();
+                    if (p && typeof p.catch === "function") p.catch(() => {});
+                  }}
+                  className="absolute inset-0 w-full h-full object-contain bg-[#0c0a08]"
+                />
+              </div>
+
+              {/* Caption + WhatsApp CTA */}
+              <div className="mt-5 md:mt-6 text-center text-[#fdfaf5]">
+                <p
+                  id="lightbox-title"
+                  className="smallcaps text-[10px] md:text-[11px] tracking-[0.35em] text-[#d8b87a]"
+                >
+                  {FEATURED_FILMS[lightboxFilm].couple}
+                </p>
+                <p className="mt-1 text-[16px] md:text-[18px] font-light italic">
+                  {FEATURED_FILMS[lightboxFilm].scene}
+                </p>
+                <a
+                  href={waHref(
+                    `Olá! Vim pelo site vvstorymaker, vi o filme do casal ${FEATURED_FILMS[lightboxFilm].couple} (cena "${FEATURED_FILMS[lightboxFilm].scene}") e gostaria de conversar sobre o meu casamento.`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-4 md:mt-5 inline-flex items-center gap-3 smallcaps text-[10px] md:text-[11px] tracking-[0.3em] border border-[#fdfaf5]/40 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] text-[#fdfaf5] transition-colors min-h-[44px] px-5 md:px-6 py-3"
+                >
+                  conversar sobre este filme
+                  <span className="block w-4 h-px bg-current transition-all duration-500 group-hover:w-8" />
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
     </MotionConfig>
   );
