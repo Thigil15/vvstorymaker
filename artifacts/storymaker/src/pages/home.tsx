@@ -18,9 +18,17 @@ import details1 from "@/assets/images/details-1.png";
 import details2 from "@/assets/images/details-2.png";
 
 const WHATSAPP_LINK = "https://wa.me/5512982355909";
-const WHATSAPP_TEXT =
-  "Olá! Vim pelo site e gostaria de conversar sobre o filme do meu casamento.";
-const WHATSAPP_HREF = `${WHATSAPP_LINK}?text=${encodeURIComponent(WHATSAPP_TEXT)}`;
+const waHref = (text: string) =>
+  `${WHATSAPP_LINK}?text=${encodeURIComponent(text)}`;
+
+const WA_MESSAGES = {
+  generic:
+    "Olá! Vim pelo site da Storymaker e gostaria de conversar sobre o filme do meu casamento.",
+  about:
+    "Olá! Vim pelo site da Storymaker e gostaria de agendar uma conversa para falar sobre o filme do meu casamento.",
+};
+
+const WHATSAPP_HREF = waHref(WA_MESSAGES.generic);
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -317,7 +325,9 @@ export default function Home() {
             {FEATURED_FILMS.map((f, i) => (
               <a
                 key={`${f.couple}-${i}`}
-                href={WHATSAPP_HREF}
+                href={waHref(
+                  `Olá! Vim pelo site da Storymaker, vi o filme do casal ${f.couple} (cena "${f.scene}") e gostaria de conversar sobre o meu casamento.`,
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="shrink-0 w-[240px] md:w-[300px] lg:w-[340px] snap-start group"
@@ -377,7 +387,9 @@ export default function Home() {
             {PACKAGES.map((pkg) => (
               <motion.a
                 key={pkg.name}
-                href={WHATSAPP_HREF}
+                href={waHref(
+                  `Olá! Vim pelo site da Storymaker e tenho interesse na coleção ${pkg.name} (${pkg.price}). Pode me passar mais detalhes?`,
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 initial="hidden"
@@ -512,7 +524,7 @@ export default function Home() {
               vocês se lembram daquele dia.
             </p>
             <a
-              href={WHATSAPP_HREF}
+              href={waHref(WA_MESSAGES.about)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-9 inline-block smallcaps text-[12px] tracking-[0.3em] border border-[#1a1410] text-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5] transition-colors px-7 py-3.5"
