@@ -3,7 +3,7 @@ modules = ["nodejs-24"]
 [deployment]
 router = "application"
 deploymentTarget = "static"
-publicDir = "https://github.com/vvstorymaker/vvstorymaker"
+publicDir = "artifacts/storymaker/dist/public"
 
 [deployment.postBuild]
 args = ["pnpm", "store", "prune"]
