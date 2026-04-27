@@ -188,20 +188,20 @@ export default function Home() {
             : "bg-transparent"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-4 md:py-5 grid grid-cols-3 items-center">
+        <div className="max-w-[1400px] mx-auto px-5 md:px-12 py-3 md:py-5 flex lg:grid lg:grid-cols-3 items-center justify-between lg:justify-stretch">
           {/* Logo (left) */}
-          <a href="#top" className="flex items-center">
+          <a href="#top" className="flex items-center shrink-0">
             <img
               src={logoImage}
               alt="Storymaker de Casamento"
-              className={`h-14 md:h-16 w-auto transition-all duration-500 ${
+              className={`h-11 md:h-14 lg:h-16 w-auto transition-all duration-500 ${
                 scrolled ? "" : "brightness-0 invert"
               }`}
             />
           </a>
 
           {/* Nav (center) */}
-          <nav className="hidden md:flex items-center justify-center gap-8 lg:gap-10">
+          <nav className="hidden lg:flex items-center justify-center gap-8 xl:gap-10">
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
@@ -218,13 +218,13 @@ export default function Home() {
           </nav>
 
           {/* CTA (right) */}
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center lg:justify-end">
             <a
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Falar no WhatsApp"
-              className={`smallcaps text-[10px] md:text-[12px] tracking-[0.22em] md:tracking-[0.25em] uppercase border px-3.5 md:px-5 py-2 md:py-2.5 transition-colors ${
+              className={`smallcaps text-[10px] md:text-[12px] tracking-[0.2em] md:tracking-[0.25em] uppercase border min-h-[44px] inline-flex items-center px-4 md:px-5 py-2 md:py-2.5 transition-colors ${
                 scrolled
                   ? "border-[#1a1410] text-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5]"
                   : "border-[#fdfaf5] text-[#fdfaf5] hover:bg-[#fdfaf5] hover:text-[#1a1410]"
@@ -237,7 +237,7 @@ export default function Home() {
       </header>
 
       {/* HERO — fullbanner */}
-      <section id="top" className="relative h-[92vh] min-h-[620px] max-h-[920px] -mt-[88px] md:-mt-[104px] overflow-hidden">
+      <section id="top" className="relative h-[88vh] min-h-[560px] max-h-[920px] -mt-[68px] md:-mt-[104px] overflow-hidden">
         <img
           src={heroSilhouettes}
           alt="Silhueta de noivos entre velas"
@@ -246,22 +246,19 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
 
-        <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
+        <div className="relative z-10 h-full flex items-center justify-center text-center px-4 md:px-5">
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-            <p
-              className="text-[#fdfaf5] font-light text-[clamp(2.4rem,6vw,5.6rem)] leading-[1.05]"
-              style={{ letterSpacing: "0.18em" }}
-            >
+            <p className="text-[#fdfaf5] font-light text-[clamp(2.1rem,7vw,5.6rem)] leading-[1.05] tracking-[0.04em] sm:tracking-[0.08em] md:tracking-[0.18em] whitespace-nowrap">
               feita para reviver
             </p>
-            <p className="mt-6 text-[#fdfaf5]/85 italic font-light text-[clamp(1rem,1.6vw,1.25rem)] tracking-wide">
+            <p className="mt-5 md:mt-6 text-[#fdfaf5]/85 italic font-light text-[clamp(0.95rem,1.6vw,1.25rem)] tracking-wide px-4">
               filmes de casamento, feitos com afeto
             </p>
           </motion.div>
         </div>
 
         {/* scroll cue */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#fdfaf5]/70 text-[10px] tracking-[0.4em] uppercase">
+        <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 text-[#fdfaf5]/70 text-[10px] tracking-[0.35em] md:tracking-[0.4em] uppercase whitespace-nowrap">
           role para descobrir
         </div>
       </section>
@@ -272,12 +269,12 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={fadeUp}
-        className="max-w-[820px] mx-auto px-6 py-24 md:py-32 text-center"
+        className="max-w-[820px] mx-auto px-5 md:px-6 py-16 md:py-32 text-center"
       >
-        <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-light leading-tight">
+        <h1 className="text-[clamp(1.7rem,4vw,3rem)] font-light leading-tight">
           Made with love by <span className="italic">Storymaker</span>
         </h1>
-        <p className="mt-8 text-[17px] md:text-[18px] leading-[1.9] font-light text-[#3b322a]">
+        <p className="mt-6 md:mt-8 text-[15.5px] md:text-[18px] leading-[1.8] md:leading-[1.9] font-light text-[#3b322a]">
           Acreditamos que cada casamento merece ser contado com a delicadeza
           de um filme — não documentado, mas{" "}
           <span className="italic">eternizado</span>. Trabalhamos com poucos
@@ -289,14 +286,14 @@ export default function Home() {
       </motion.section>
 
       {/* FEATURED FILMS — Bestsellers */}
-      <section id="casais" className="border-t border-[#1a1410]/10 py-20 md:py-24">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="flex items-end justify-between mb-10">
+      <section id="casais" className="border-t border-[#1a1410]/10 py-14 md:py-24">
+        <div className="max-w-[1400px] mx-auto px-5 md:px-12">
+          <div className="flex items-end justify-between mb-8 md:mb-10">
             <div>
-              <p className="smallcaps text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-3">
+              <p className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-2 md:mb-3">
                 demonstração
               </p>
-              <h2 className="text-[clamp(1.8rem,3.4vw,2.6rem)] font-light italic">
+              <h2 className="text-[clamp(1.6rem,3.4vw,2.6rem)] font-light italic">
                 uma pequena amostra do nosso olhar
               </h2>
             </div>
@@ -320,7 +317,7 @@ export default function Home() {
 
           <div
             ref={featuredRef}
-            className="no-scrollbar flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 px-6"
+            className="no-scrollbar flex gap-4 md:gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-5 md:-mx-6 px-5 md:px-6"
           >
             {FEATURED_FILMS.map((f, i) => (
               <a
@@ -330,7 +327,7 @@ export default function Home() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 w-[240px] md:w-[300px] lg:w-[340px] snap-start group"
+                className="shrink-0 w-[78vw] sm:w-[260px] md:w-[300px] lg:w-[340px] snap-start group"
               >
                 <div className="relative aspect-[9/16] overflow-hidden bg-[#0c0a08]">
                   {f.video ? (
@@ -372,18 +369,18 @@ export default function Home() {
       </section>
 
       {/* PACKAGES — home-banners-grid (2x2) */}
-      <section id="colecoes" className="py-20 md:py-28 bg-[#f4eee2]/40">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="text-center mb-14 md:mb-16">
-            <p className="smallcaps text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-3">
+      <section id="colecoes" className="py-14 md:py-28 bg-[#f4eee2]/40">
+        <div className="max-w-[1400px] mx-auto px-5 md:px-12">
+          <div className="text-center mb-10 md:mb-16">
+            <p className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-2 md:mb-3">
               coleções
             </p>
-            <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-light leading-tight">
+            <h2 className="text-[clamp(1.7rem,4vw,3.2rem)] font-light leading-tight">
               Quatro caminhos para contar a sua história
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+          <div className="grid md:grid-cols-2 gap-4 md:gap-6">
             {PACKAGES.map((pkg) => (
               <motion.a
                 key={pkg.name}
@@ -411,23 +408,23 @@ export default function Home() {
                   </div>
                 )}
 
-                <div className="absolute inset-0 p-7 md:p-10 flex flex-col justify-end text-[#fdfaf5]">
-                  <p className="smallcaps text-[11px] tracking-[0.3em] opacity-80 mb-2">
+                <div className="absolute inset-0 p-5 md:p-10 flex flex-col justify-end text-[#fdfaf5]">
+                  <p className="smallcaps text-[10px] md:text-[11px] tracking-[0.3em] opacity-80 mb-1.5 md:mb-2">
                     coleção
                   </p>
-                  <h3 className="text-[clamp(1.7rem,2.8vw,2.4rem)] font-light leading-tight">
+                  <h3 className="text-[clamp(1.5rem,2.8vw,2.4rem)] font-light leading-tight">
                     {pkg.name}
                   </h3>
-                  <ul className="mt-3 space-y-1 text-[14px] md:text-[15px] font-light opacity-90">
+                  <ul className="mt-2.5 md:mt-3 space-y-0.5 md:space-y-1 text-[13.5px] md:text-[15px] font-light opacity-90">
                     {pkg.bullets.map((b) => (
                       <li key={b}>· {b}</li>
                     ))}
                   </ul>
-                  <div className="mt-5 flex items-end justify-between gap-4">
-                    <p className="text-[clamp(1.4rem,2vw,1.8rem)] font-light">
+                  <div className="mt-4 md:mt-5 flex items-end justify-between gap-3 md:gap-4">
+                    <p className="text-[clamp(1.25rem,2vw,1.8rem)] font-light">
                       {pkg.price}
                     </p>
-                    <span className="smallcaps text-[11px] tracking-[0.25em] border-b border-[#fdfaf5]/70 pb-0.5 group-hover:border-[#fdfaf5] transition-colors">
+                    <span className="smallcaps text-[10px] md:text-[11px] tracking-[0.25em] border-b border-[#fdfaf5]/70 pb-0.5 group-hover:border-[#fdfaf5] transition-colors">
                       conversar →
                     </span>
                   </div>
@@ -439,10 +436,10 @@ export default function Home() {
       </section>
 
       {/* ADD-ONS — banners-middle pattern adapted */}
-      <section id="complementos" className="py-20 md:py-28">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center mb-16">
-            <div className="relative aspect-[4/5] overflow-hidden">
+      <section id="complementos" className="py-14 md:py-28">
+        <div className="max-w-[1400px] mx-auto px-5 md:px-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center mb-12 md:mb-16">
+            <div className="relative aspect-[4/3] md:aspect-[4/5] overflow-hidden">
               <img
                 src={champagneImage}
                 alt="Detalhes do casamento"
@@ -451,13 +448,13 @@ export default function Home() {
               />
             </div>
             <div>
-              <p className="smallcaps text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-4">
+              <p className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-3 md:mb-4">
                 complementos
               </p>
-              <h2 className="text-[clamp(1.8rem,3.4vw,2.8rem)] font-light leading-tight">
+              <h2 className="text-[clamp(1.6rem,3.4vw,2.8rem)] font-light leading-tight">
                 Detalhes que tornam cada filme único
               </h2>
-              <p className="mt-6 text-[16px] md:text-[17px] leading-[1.85] font-light text-[#3b322a]">
+              <p className="mt-5 md:mt-6 text-[15.5px] md:text-[17px] leading-[1.8] md:leading-[1.85] font-light text-[#3b322a]">
                 Some à sua coleção pequenos cuidados que fazem toda a diferença
                 — dos votos gravados ao vídeo carta dos convidados. Cada
                 complemento pode ser combinado com qualquer pacote.
@@ -465,7 +462,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {ADDONS.map((a) => (
               <motion.div
                 key={a.name}
@@ -483,11 +480,11 @@ export default function Home() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="pt-5">
-                  <h3 className="text-[20px] md:text-[22px] font-light italic">
+                <div className="pt-3.5 md:pt-5">
+                  <h3 className="text-[17px] md:text-[22px] font-light italic">
                     {a.name}
                   </h3>
-                  <p className="mt-2 text-[14px] leading-[1.7] font-light text-[#5a4f43]">
+                  <p className="mt-1.5 md:mt-2 text-[13px] md:text-[14px] leading-[1.6] md:leading-[1.7] font-light text-[#5a4f43]">
                     {a.desc}
                   </p>
                 </div>
@@ -498,8 +495,8 @@ export default function Home() {
       </section>
 
       {/* SOBRE — banner_footer / concierge pattern */}
-      <section id="sobre" className="py-20 md:py-28">
-        <div className="max-w-[1280px] mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+      <section id="sobre" className="py-14 md:py-28">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-12 grid md:grid-cols-2 gap-10 md:gap-20 items-center">
           <div className="relative aspect-[4/5] overflow-hidden order-2 md:order-1">
             <img
               src={ownerImage}
@@ -509,14 +506,14 @@ export default function Home() {
             />
           </div>
           <div className="order-1 md:order-2">
-            <p className="smallcaps text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-4">
+            <p className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#8a6a2e] mb-3 md:mb-4">
               quem está atrás da câmera
             </p>
-            <h2 className="text-[clamp(1.9rem,3.6vw,2.8rem)] font-light leading-tight">
+            <h2 className="text-[clamp(1.7rem,3.6vw,2.8rem)] font-light leading-tight">
               Atendimento <span className="italic">personalizado</span>, do
               primeiro <span className="italic">olá</span> à entrega final.
             </h2>
-            <p className="mt-6 text-[16px] md:text-[17px] leading-[1.85] font-light text-[#3b322a]">
+            <p className="mt-5 md:mt-6 text-[15.5px] md:text-[17px] leading-[1.8] md:leading-[1.85] font-light text-[#3b322a]">
               Eu acompanho cada casal pessoalmente. Antes do casamento,
               conversamos sobre a história de vocês. No dia, filmo com calma e
               presença, sem atrapalhar. Depois, edito ouvindo a trilha que faz
@@ -527,7 +524,7 @@ export default function Home() {
               href={waHref(WA_MESSAGES.about)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-9 inline-block smallcaps text-[12px] tracking-[0.3em] border border-[#1a1410] text-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5] transition-colors px-7 py-3.5"
+              className="mt-7 md:mt-9 inline-flex items-center smallcaps text-[11px] md:text-[12px] tracking-[0.28em] md:tracking-[0.3em] border border-[#1a1410] text-[#1a1410] hover:bg-[#1a1410] hover:text-[#fdfaf5] transition-colors min-h-[44px] px-6 md:px-7 py-3 md:py-3.5"
             >
               agendar uma conversa
             </a>
@@ -536,27 +533,27 @@ export default function Home() {
       </section>
 
       {/* CONTATO / FOOTER */}
-      <footer id="contato" className="bg-[#0c0a08] text-[#fdfaf5] pt-20 pb-10">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="grid md:grid-cols-4 gap-10 md:gap-12 pb-16 border-b border-[#fdfaf5]/15">
-            <div>
+      <footer id="contato" className="bg-[#0c0a08] text-[#fdfaf5] pt-14 md:pt-20 pb-8 md:pb-10">
+        <div className="max-w-[1400px] mx-auto px-5 md:px-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 pb-12 md:pb-16 border-b border-[#fdfaf5]/15">
+            <div className="col-span-2 md:col-span-1">
               <img
                 src={logoImage}
                 alt="Storymaker"
                 loading="lazy"
-                className="h-20 w-auto brightness-0 invert"
+                className="h-16 md:h-20 w-auto brightness-0 invert"
               />
-              <p className="mt-6 text-[14px] leading-[1.8] font-light text-[#fdfaf5]/70">
+              <p className="mt-4 md:mt-6 text-[13.5px] md:text-[14px] leading-[1.7] md:leading-[1.8] font-light text-[#fdfaf5]/70 max-w-[420px]">
                 Filmes de casamento autorais, com olhar cinematográfico e
                 atendimento direto com o diretor.
               </p>
             </div>
 
             <div>
-              <h3 className="smallcaps text-[12px] tracking-[0.3em] text-[#fdfaf5]/60 mb-5">
+              <h3 className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#fdfaf5]/60 mb-4 md:mb-5">
                 coleções
               </h3>
-              <ul className="space-y-2.5 text-[14px] font-light">
+              <ul className="space-y-2 md:space-y-2.5 text-[13.5px] md:text-[14px] font-light">
                 {PACKAGES.map((p) => (
                   <li key={p.name}>
                     <a href="#colecoes" className="hover:text-[#d8b87a] transition-colors">
@@ -568,10 +565,10 @@ export default function Home() {
             </div>
 
             <div>
-              <h3 className="smallcaps text-[12px] tracking-[0.3em] text-[#fdfaf5]/60 mb-5">
+              <h3 className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#fdfaf5]/60 mb-4 md:mb-5">
                 complementos
               </h3>
-              <ul className="space-y-2.5 text-[14px] font-light">
+              <ul className="space-y-2 md:space-y-2.5 text-[13.5px] md:text-[14px] font-light">
                 {ADDONS.map((a) => (
                   <li key={a.name}>
                     <a href="#complementos" className="hover:text-[#d8b87a] transition-colors">
@@ -582,11 +579,11 @@ export default function Home() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="smallcaps text-[12px] tracking-[0.3em] text-[#fdfaf5]/60 mb-5">
+            <div className="col-span-2 md:col-span-1">
+              <h3 className="smallcaps text-[11px] md:text-[12px] tracking-[0.3em] text-[#fdfaf5]/60 mb-4 md:mb-5">
                 contato
               </h3>
-              <ul className="space-y-2.5 text-[14px] font-light">
+              <ul className="space-y-2 md:space-y-2.5 text-[13.5px] md:text-[14px] font-light">
                 <li>
                   <a
                     href={WHATSAPP_HREF}
@@ -603,7 +600,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-[#fdfaf5]/50">
+          <div className="pt-6 md:pt-8 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-[11px] md:text-[12px] text-[#fdfaf5]/50 text-center md:text-left">
             <p>© {new Date().getFullYear()} Storymaker de Casamento · Todos os direitos reservados</p>
             <p className="smallcaps tracking-[0.3em]">made with love</p>
           </div>
