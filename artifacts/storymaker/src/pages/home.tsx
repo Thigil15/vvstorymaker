@@ -388,7 +388,7 @@ export default function Home() {
               <motion.a
                 key={pkg.name}
                 href={waHref(
-                  `Olá! Vim pelo site da Storymaker e tenho interesse na coleção ${pkg.name} (${pkg.price}). Pode me passar mais detalhes?`,
+                  `Olá! Vim pelo site da Storymaker e tenho interesse na coleção ${pkg.name}. Pode me passar mais detalhes?`,
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
