@@ -1005,7 +1005,10 @@ export default function Home() {
               </svg>
             </button>
 
-            {/* Player container — stop propagation so clicking video doesn't close */}
+            {/* Player + caption stack — width is derived from the available
+                vertical space so the 9:16 video plus its caption always fit
+                within the viewport (truly centered, no scroll, no clipping).
+                Reserved budget: ~220px for caption + corners + padding. */}
             <motion.div
               key={`player-${lightboxFilm}`}
               initial={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -1013,43 +1016,49 @@ export default function Home() {
               exit={{ opacity: 0, scale: 0.96, y: 8 }}
               transition={{ duration: 0.55, ease: EASE_CINEMATIC }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-[420px] md:max-w-[460px]"
+              className="relative flex flex-col items-center"
+              style={{
+                width: "min(460px, calc((100dvh - 220px) * 9 / 16))",
+              }}
             >
-              {/* Gold corner accents around the player */}
-              <span aria-hidden className="absolute -top-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-t border-l border-[#d8b87a]/80 pointer-events-none" />
-              <span aria-hidden className="absolute -top-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-t border-r border-[#d8b87a]/80 pointer-events-none" />
-              <span aria-hidden className="absolute -bottom-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-b border-l border-[#d8b87a]/80 pointer-events-none" />
-              <span aria-hidden className="absolute -bottom-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-b border-r border-[#d8b87a]/80 pointer-events-none" />
+              {/* Player frame — corners are anchored to the video itself,
+                  not to the wrapper, so they stay around the picture. */}
+              <div className="relative w-full">
+                <span aria-hidden className="absolute -top-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-t border-l border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -top-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-t border-r border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -bottom-3 -left-3 w-6 h-6 md:w-8 md:h-8 border-b border-l border-[#d8b87a]/80 pointer-events-none z-10" />
+                <span aria-hidden className="absolute -bottom-3 -right-3 w-6 h-6 md:w-8 md:h-8 border-b border-r border-[#d8b87a]/80 pointer-events-none z-10" />
 
-              <div className="relative aspect-[9/16] max-h-[82vh] mx-auto overflow-hidden bg-[#0c0a08] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]">
-                <video
-                  key={FEATURED_FILMS[lightboxFilm].video}
-                  src={FEATURED_FILMS[lightboxFilm].video ?? undefined}
-                  poster={FEATURED_FILMS[lightboxFilm].poster}
-                  autoPlay
-                  controls
-                  playsInline
-                  preload="auto"
-                  onCanPlay={(e) => {
-                    // Some browsers block autoplay even when muted is omitted; we
-                    // try once and stay quiet if blocked — controls are visible.
-                    const v = e.currentTarget;
-                    const p = v.play();
-                    if (p && typeof p.catch === "function") p.catch(() => {});
-                  }}
-                  className="absolute inset-0 w-full h-full object-contain bg-[#0c0a08]"
-                />
+                <div className="relative w-full aspect-[9/16] overflow-hidden bg-[#0c0a08] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]">
+                  <video
+                    key={FEATURED_FILMS[lightboxFilm].video}
+                    src={FEATURED_FILMS[lightboxFilm].video ?? undefined}
+                    poster={FEATURED_FILMS[lightboxFilm].poster}
+                    autoPlay
+                    controls
+                    playsInline
+                    preload="auto"
+                    onCanPlay={(e) => {
+                      // Some browsers block autoplay even when muted is omitted; we
+                      // try once and stay quiet if blocked — controls are visible.
+                      const v = e.currentTarget;
+                      const p = v.play();
+                      if (p && typeof p.catch === "function") p.catch(() => {});
+                    }}
+                    className="absolute inset-0 w-full h-full object-contain bg-[#0c0a08]"
+                  />
+                </div>
               </div>
 
               {/* Caption + WhatsApp CTA */}
-              <div className="mt-5 md:mt-6 text-center text-[#fdfaf5]">
+              <div className="mt-4 md:mt-5 text-center text-[#fdfaf5] w-full">
                 <p
                   id="lightbox-title"
                   className="smallcaps text-[10px] md:text-[11px] tracking-[0.35em] text-[#d8b87a]"
                 >
                   {FEATURED_FILMS[lightboxFilm].couple}
                 </p>
-                <p className="mt-1 text-[16px] md:text-[18px] font-light italic">
+                <p className="mt-1 text-[15px] md:text-[17px] font-light italic leading-tight">
                   {FEATURED_FILMS[lightboxFilm].scene}
                 </p>
                 <a
@@ -1058,7 +1067,7 @@ export default function Home() {
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group mt-4 md:mt-5 inline-flex items-center gap-3 smallcaps text-[10px] md:text-[11px] tracking-[0.3em] border border-[#fdfaf5]/40 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] text-[#fdfaf5] transition-colors min-h-[44px] px-5 md:px-6 py-3"
+                  className="group mt-3 md:mt-4 inline-flex items-center gap-3 smallcaps text-[10px] md:text-[11px] tracking-[0.3em] border border-[#fdfaf5]/40 hover:border-[#d8b87a] hover:bg-[#d8b87a] hover:text-[#0c0a08] text-[#fdfaf5] transition-colors min-h-[44px] px-5 md:px-6 py-3"
                 >
                   conversar sobre este filme
                   <span className="block w-4 h-px bg-current transition-all duration-500 group-hover:w-8" />
