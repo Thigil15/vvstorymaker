@@ -1,0 +1,15 @@
+{
+  "name": "storymaker-hostinger",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor Node.js (Express) que serve o build estatico do Storymaker na Hostinger.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
