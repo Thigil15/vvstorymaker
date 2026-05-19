@@ -429,24 +429,8 @@ export default function Home() {
           style={{ transformOrigin: "center" }}
           className="w-12 h-px bg-[#8a6a2e] mx-auto mb-8 md:mb-10"
         />
-        <h2 className="text-[clamp(1.7rem,4vw,3rem)] font-light leading-tight">
-          <WordReveal text="Made with love by" />
-          <br className="sm:hidden" />{" "}
-          <span className="italic inline-block overflow-hidden align-bottom">
-            <motion.span
-              initial={{ y: "110%", opacity: 0 }}
-              whileInView={{ y: "0%", opacity: 1 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{
-                duration: 1,
-                delay: 0.45,
-                ease: EASE_CINEMATIC,
-              }}
-              className="inline-block"
-            >
-              Storymaker
-            </motion.span>
-          </span>
+        <h2 className="text-[clamp(1.7rem,4vw,3rem)] font-light leading-tight text-center">
+          <WordReveal text="Made with love by Storymaker" />
         </h2>
         <motion.p
           initial="hidden"
